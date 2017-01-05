@@ -13,21 +13,21 @@
  * @package           Plugin_Name
  *
  * @wordpress-plugin
- * Plugin Name:       WordPress Plugin Boilerplate
+ * Plugin Name:       EMS payments for WooCommerce
  * Plugin URI:        http://example.com/plugin-name-uri/
- * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
+ * Description:       Accept payments in WooCommerce with the official EMS e-Commerce Gateway plugin.
  * Version:           1.0.0
- * Author:            Your Name or Your Company
- * Author URI:        http://example.com/
+ * Author:            DLWT
+ * Author URI:        http://www.dlwt.nl/
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
- * Text Domain:       plugin-name
+ * Text Domain:       emspay
  * Domain Path:       /languages
  */
 
 // If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
-	die;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly
 }
 
 /**
