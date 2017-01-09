@@ -4,6 +4,8 @@ Options stored in WP
 - Shared secret
 - Mode: integration / production
 - Checkout option: combinedpage / classic
+- Paymode: payonly, payplus, fullpay
+- Payment method selection: true/false
 
 Hard-coded settings
 ===================
