@@ -2,7 +2,7 @@ Options stored in WP
 ====================
 - Store name
 - Shared secret
-- Mode: integration / production
+- Environment: integration / production
 - Checkout option: combinedpage / classic
 - Paymode: payonly, payplus, fullpay
 - Payment method selection: true/false
