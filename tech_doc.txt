@@ -5,7 +5,6 @@ Options stored in WP
 - Environment: integration / production
 - Checkout option: combinedpage / classic
 - Paymode: payonly, payplus, fullpay
-- Payment method selection: true/false
 
 Hard-coded settings
 ===================
