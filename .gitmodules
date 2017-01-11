@@ -1,0 +1,3 @@
+[submodule "ems-payments-for-woocommerce/includes/core"]
+	path = ems-payments-for-woocommerce/includes/core
+	url = https://github.com/DLWT/EMSCore.git
