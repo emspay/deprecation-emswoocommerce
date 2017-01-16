@@ -1,5 +1,9 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly
+}
+
 /**
  * The plugin bootstrap file
  *
@@ -10,7 +14,7 @@
  *
  * @link              http://example.com
  * @since             1.0.0
- * @package           Plugin_Name
+ * @package           Ems_Payments_For_WooCommerce
  *
  * @wordpress-plugin
  * Plugin Name:       EMS payments for WooCommerce
@@ -25,51 +29,252 @@
  * Domain Path:       /languages
  */
 
-// If this file is called directly, abort.
-if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
-}
 
 /**
- * The code that runs during plugin activation.
- * This action is documented in includes/class-plugin-name-activator.php
- */
-function activate_plugin_name() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-plugin-name-activator.php';
-	Plugin_Name_Activator::activate();
-}
-
-/**
- * The code that runs during plugin deactivation.
- * This action is documented in includes/class-plugin-name-deactivator.php
- */
-function deactivate_plugin_name() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-plugin-name-deactivator.php';
-	Plugin_Name_Deactivator::deactivate();
-}
-
-register_activation_hook( __FILE__, 'activate_plugin_name' );
-register_deactivation_hook( __FILE__, 'deactivate_plugin_name' );
-
-/**
- * The core plugin class that is used to define internationalization,
- * admin-specific hooks, and public-facing site hooks.
- */
-require plugin_dir_path( __FILE__ ) . 'includes/class-plugin-name.php';
-
-/**
- * Begins execution of the plugin.
+ * EMS Pay Gateway Plugin.
  *
- * Since everything within the plugin is registered via hooks,
- * then kicking off the plugin from this point in the file does
- * not affect the page life cycle.
- *
- * @since    1.0.0
+ * @package  Ems_Payments_For_WooCommerce
+ * @category Class
+ * @author   DLWT
+ * @version  1.0.0
  */
-function run_plugin_name() {
+final class Emspay_Gateway_Plugin {
 
-	$plugin = new Plugin_Name();
-	$plugin->run();
+	/**
+	 * @var Emspay_Gateway_Plugin The single instance of the class
+	 * @access protected
+	 * @since 1.0
+	 */
+	protected static $_instance = null;
+
+	/**
+	 * Main Emspay_Gateway_Plugin Instance.
+	 *
+	 * Ensures only one instance of Emspay_Gateway_Plugin is loaded or can be loaded.
+	 *
+	 * @since 1.0.0
+	 * @static
+	 * @return Emspay_Gateway_Plugin Main instance
+	 */
+	public static function instance() {
+		if ( is_null( self::$_instance ) ) {
+			self::$_instance = new self();
+		}
+		return self::$_instance;
+	}
+
+
+	/**
+	 * Emspay_Gateway_Plugin Constructor.
+	 *
+	 * @access public
+	 * @since  1.0.0
+	 */
+	public function __construct() {
+		$this->includes();
+		$this->init_hooks();
+	}
+
+
+	/**
+	 * Hook into actions and filters.
+	 *
+	 * @access private
+	 * @since  1.0.0
+	 * @return void
+	 */
+	private function init_hooks() {
+		add_action( 'plugins_loaded', array( $this, 'init_plugin' ) );
+		add_filter( 'woocommerce_currencies', array( 'Emspay_Currency', 'emspay_supported_currencies' ) );
+	}
+
+
+	/**
+	 * Include required core files used in admin and on the frontend.
+	 *
+	 * @access private
+	 * @since  1.0.0
+	 * @return void
+	 */
+	private function includes() {
+		include_once 'includes/class-emspay-currency.php';
+	}
+
+
+	/**
+	 * Initialize the plugin.
+	 *
+	 * @access public
+	 * @since  1.0.0
+	 * @return void
+	 */
+	public function init_plugin() {
+		// Checks if WooCommerce is installed.
+		if ( class_exists( 'WC_Integration' ) ) {
+			$this->register_integration();
+
+			$this->register_gateways();
+
+			// If needed show admin missing settings warning
+			add_action( 'admin_notices', array( $this, 'show_settings_warning' ) );
+
+			$this->load_plugin_textdomain();
+		} else {
+			// maybe throw an admin error
+		}
+	}
+
+
+	/**
+	 * Register the integration.
+	 *
+	 * @access private
+	 * @since  1.0.0
+	 * @return void
+	 */
+	private function register_integration() {
+		// Include our integration class.
+		include_once 'includes/class-emspay-integration.php';
+
+		// Register the integration.
+		add_filter( 'woocommerce_integrations', array( $this, 'add_integration' ) );
+	}
+
+
+	/**
+	 * Init gateways.
+	 *
+	 * @access private
+	 * @since  1.0.0
+	 * @return void
+	 */
+	private function register_gateways() {
+		// Include required classes.
+		include_once 'includes/core/index.php';
+		include_once 'includes/abstracts/abstract-emspay-gateway.php';
+		include_once 'includes/gateways/class-emspay-gateway-bancontact.php';
+		include_once 'includes/gateways/class-emspay-gateway-creditcard.php';
+		include_once 'includes/gateways/class-emspay-gateway-ideal.php';
+		include_once 'includes/gateways/class-emspay-gateway-klarna.php';
+		include_once 'includes/gateways/class-emspay-gateway-maestro.php';
+		include_once 'includes/gateways/class-emspay-gateway-masterpass.php';
+		include_once 'includes/gateways/class-emspay-gateway-paypal.php';
+		include_once 'includes/gateways/class-emspay-gateway-sofort.php';
+
+		include_once 'includes/class-emspay-gateway-response.php';
+
+		// Register the gateways.
+		add_filter( 'woocommerce_payment_gateways', array( $this, 'payment_gateways' ) );
+	}
+
+
+	/**
+	 * Load Localisation file.
+	 *
+	 * @access private
+	 * @since  1.0.0
+	 * @return void
+	 */
+	private function load_plugin_textdomain() {
+		load_plugin_textdomain( 'emspay', false, plugin_basename( dirname( __FILE__ ) ) . '/languages' );
+	}
+
+
+	/**
+	 * Add Emspay Gateway integration to WooCommerce.
+	 *
+	 * @access public
+	 * @since  1.0.0
+	 * @param  array
+	 * @return array
+	 */
+	public function add_integration( $integrations ) {
+		$integrations[] = 'Emspay_Integration';
+
+		return $integrations;
+	}
+
+
+	/**
+	 * Init gateways
+	 *
+	 * @access public
+	 * @since  1.0.0
+	 * @param  array
+	 * @return array
+	 */
+	public function payment_gateways( $load_gateways ) {
+		$gateways = array(
+			'Emspay_Gateway_Bancontact',
+			'Emspay_Gateway_Creditcard',
+			'Emspay_Gateway_Ideal',
+			'Emspay_Gateway_Klarna',
+			'Emspay_Gateway_Maestro',
+			'Emspay_Gateway_Masterpass',
+			'Emspay_Gateway_Paypal',
+			'Emspay_Gateway_Sofort',
+		);
+
+		return array_merge( $load_gateways, $gateways );
+	}
+
+
+	/**
+	 * Display an admin warning, if required settings are missing.
+	 *
+	 * @access public
+	 * @since  1.0.0
+	 * @return void
+	 */
+	public function show_settings_warning() {
+		$integration = $this->get_integration();
+
+		$storename    = $integration->get_option( 'storename' );
+		$sharedsecret = $integration->get_option( 'sharedsecret' );
+
+		if ( empty( $storename ) || empty( $sharedsecret ) ) {
+			$url = $this->get_settings_url();
+			?>
+			<div class="notice notice-warning">
+				<p>
+					<?php echo sprintf( __( '%sEMS e-Commerce Gateway is almost ready. To get started, %sconnect your EMS account%s.%s', 'emspay' ), '<strong>', '<a href="' . esc_url( $url ) . '">', '</a>', '</strong>' ); ?>
+				</p>
+			</div>
+			<?php
+		}
+	}
+
+	/**
+	 * Generate a URL to our specific settings screen.
+	 *
+	 * @access public
+	 * @since  1.0.0
+	 * @return string Generated URL.
+	 */
+	public function get_settings_url() {
+		$url = admin_url( 'admin.php' );
+		$url = add_query_arg( 'page', 'wc-settings', $url );
+		$url = add_query_arg( 'tab', 'integration', $url );
+		$url = add_query_arg( 'section', 'emspay', $url );
+
+		return $url;
+	}
+
+
+	public function get_integration() {
+		// Find a different method of retrieving this value.
+		return WC()->integrations->integrations['emspay'];
+	}
 
 }
-run_plugin_name();
+
+/**
+ * Return instance of Emspay_Gateway_Plugin.
+ *
+ * @return Emspay_Gateway_Plugin
+ */
+function emspay_gateway() {
+	return Emspay_Gateway_Plugin::instance();
+}
+
+emspay_gateway();
