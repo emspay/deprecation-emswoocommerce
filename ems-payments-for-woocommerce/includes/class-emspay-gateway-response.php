@@ -20,7 +20,7 @@ class Emspay_Gateway_Response {
 	public static function response_handler() {
 		if ( ! empty( $_POST ) ) {
 			$post = wp_unslash( $_POST );
-			$response = new EmsCore\Response( $this->get_core_option() );
+			$response = new EmsCore\Response( self::get_core_option() );
 
 			if ( $response->validate( $post ) ) {
 				$order_id = absint( $response->oid );
@@ -38,7 +38,7 @@ class Emspay_Gateway_Response {
 						update_post_meta( $order->id, '_ems_status', $response->status );
 
 						$status = strtolower( $response->status );
-						call_user_func( array( $this, 'payment_status_' . $status ), $order, $response );
+						call_user_func( array( 'Emspay_Gateway_Response', 'payment_status_' . $status ), $order, $response );
 						exit;
 					}
 				}
@@ -48,7 +48,7 @@ class Emspay_Gateway_Response {
 		wp_die( 'EMS Response Failure', 'EMS response', 500 );
 	}
 
-	protected function get_core_option() {
+	protected static function get_core_option() {
 		$integration = emspay_gateway()->get_integration();
 
 		$core_option = new EmsCore\Options();
@@ -62,27 +62,27 @@ class Emspay_Gateway_Response {
 	}
 
 
-	protected function payment_status_approved( $order, $response ) {
-		$this->payment_complete( $order, $response );
+	protected static function payment_status_approved( $order, $response ) {
+		self::payment_complete( $order, $response );
 	}
 
 
-	protected function payment_status_declined( $order, $response ) {
-		$this->payment_failed( $order, $response );
+	protected static function payment_status_declined( $order, $response ) {
+		self::payment_failed( $order, $response );
 	}
 
 
-	protected function payment_status_failed( $order, $response ) {
-		$this->payment_failed( $order, $response );
+	protected static function payment_status_failed( $order, $response ) {
+		self::payment_failed( $order, $response );
 	}
 
 
-	protected function payment_status_waiting( $order, $response ) {
-		$this->payment_on_hold( $order, $response );
+	protected static function payment_status_waiting( $order, $response ) {
+		self::payment_on_hold( $order, $response );
 	}
 
 
-	protected function payment_complete( $order, $response ) {
+	protected static function payment_complete( $order, $response ) {
 		// Add order note
 		$order->add_order_note( sprintf( __( 'EMS payment approved (Reference number: %s)', 'emspay' ), $response->refnumber ) );
 		// Payment complete
@@ -90,7 +90,7 @@ class Emspay_Gateway_Response {
 	}
 
 
-	protected function payment_failed( $order, $response ) {
+	protected static function payment_failed( $order, $response ) {
 		// Store meta data to order.
 		update_post_meta( $order->id, '_ems_fail_reason', $response->fail_reason );
 		// Set order status to failed
@@ -98,7 +98,7 @@ class Emspay_Gateway_Response {
 	}
 
 
-	protected function payment_on_hold( $order, $response ) {
+	protected static function payment_on_hold( $order, $response ) {
 		// Set order status to failed
 		$order->update_status( 'on-hold', sprintf( __( 'EMS payment pending: %s', 'emspay' ), $response->status )  );
 		$order->reduce_order_stock();
