@@ -96,7 +96,6 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 	protected function set_core_options() {
 		$integration = emspay_gateway()->get_integration();
 		$url = WC()->api_request_url( 'Emspay_Gateway' );
-		$url = 'http://mocsok.dyndns.org/?wc-api=Emspay_Gateway';
 
 		$this->core_options
 			->setStoreName($integration->storename)
