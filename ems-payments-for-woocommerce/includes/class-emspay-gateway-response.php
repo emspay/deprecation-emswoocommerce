@@ -87,6 +87,8 @@ class Emspay_Gateway_Response {
 		$order->add_order_note( sprintf( __( 'EMS payment approved (Reference number: %s)', 'emspay' ), $response->refnumber ) );
 		// Payment complete
 		$order->payment_complete( $response->refnumber );
+
+		self::maybe_redirect( $order, $response );
 	}
 
 
@@ -95,6 +97,12 @@ class Emspay_Gateway_Response {
 		update_post_meta( $order->id, '_ems_fail_reason', $response->fail_reason );
 		// Set order status to failed
 		$order->update_status( 'failed', sprintf( __( 'EMS payment error: %s', 'emspay' ), $response->fail_reason ) );
+
+		if ( !$response->isNotification() ) {
+			wc_add_notice( sprintf( __('Payment error: %s', 'emspay'), $response->fail_reason ), 'error' );
+		}
+
+		self::maybe_redirect( $order, $response );
 	}
 
 
@@ -104,5 +112,34 @@ class Emspay_Gateway_Response {
 		$order->reduce_order_stock();
 
 		//WC()->cart->empty_cart();
+
+		self::maybe_redirect( $order, $response );
 	}
+
+
+	protected static function maybe_redirect( $order, $response ) {
+		if ( $response->isNotification() ) {
+			wp_die( 'EMS Response Processed', 'EMS response', 200 );
+		}
+
+		wp_redirect( self::get_return_url( $order ) );
+		exit();
+	}
+
+
+	protected static function get_return_url( $order = null ) {
+		if ( $order ) {
+			$return_url = $order->get_checkout_order_received_url();
+		} else {
+			$return_url = wc_get_endpoint_url( 'order-received', '', wc_get_page_permalink( 'checkout' ) );
+		}
+
+		if ( is_ssl() || get_option('woocommerce_force_ssl_checkout') == 'yes' ) {
+			$return_url = str_replace( 'http:', 'https:', $return_url );
+		}
+
+		return apply_filters( 'woocommerce_get_return_url', $return_url, $order );
+	}
+
+
 }
