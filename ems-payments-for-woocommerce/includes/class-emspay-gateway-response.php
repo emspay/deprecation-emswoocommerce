@@ -100,6 +100,8 @@ class Emspay_Gateway_Response {
 			$order->add_order_note( sprintf( __( 'EMS payment approved (Reference number: %s)', 'emspay' ), $response->ipgTransactionId ) );
 			// Payment complete
 			$order->payment_complete( $response->refnumber );
+		} else {
+			Emspay_Gateway::log( 'Order #' . $order->id . ' already paid (based on the order status).' );
 		}
 
 		self::maybe_redirect( $order, $response );
