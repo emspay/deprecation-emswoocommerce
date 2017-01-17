@@ -93,24 +93,28 @@ class Emspay_Gateway_Response {
 
 
 	protected static function payment_complete( $order, $response ) {
-		Emspay_Gateway::log( 'Order #' . $order->id . ' payment complete, reference number: ' . $response->ipgTransactionId );
+		if ( !self::order_has_status( $order, 'completed' ) ) {
+			Emspay_Gateway::log( 'Order #' . $order->id . ' payment complete, reference number: ' . $response->ipgTransactionId );
 
-		// Add order note
-		$order->add_order_note( sprintf( __( 'EMS payment approved (Reference number: %s)', 'emspay' ), $response->ipgTransactionId ) );
-		// Payment complete
-		$order->payment_complete( $response->refnumber );
+			// Add order note
+			$order->add_order_note( sprintf( __( 'EMS payment approved (Reference number: %s)', 'emspay' ), $response->ipgTransactionId ) );
+			// Payment complete
+			$order->payment_complete( $response->refnumber );
+		}
 
 		self::maybe_redirect( $order, $response );
 	}
 
 
 	protected static function payment_failed( $order, $response ) {
-		Emspay_Gateway::log( 'Order #' . $order->id . ' payment failed, fail eason: ' . $response->fail_reason );
+		if ( !self::order_has_status( $order, 'failed' ) ) {
+			Emspay_Gateway::log( 'Order #' . $order->id . ' payment failed, fail eason: ' . $response->fail_reason );
 
-		// Store meta data to order.
-		update_post_meta( $order->id, '_ems_fail_reason', $response->fail_reason );
-		// Set order status to failed
-		$order->update_status( 'failed', sprintf( __( 'EMS payment error: %s', 'emspay' ), $response->fail_reason ) );
+			// Store meta data to order.
+			update_post_meta( $order->id, '_ems_fail_reason', $response->fail_reason );
+			// Set order status to failed
+			$order->update_status( 'failed', sprintf( __( 'EMS payment error: %s', 'emspay' ), $response->fail_reason ) );
+		}
 
 		if ( !$response->isNotification() ) {
 			wc_add_notice( sprintf( __('Payment error: %s', 'emspay'), $response->fail_reason ), 'error' );
@@ -121,15 +125,27 @@ class Emspay_Gateway_Response {
 
 
 	protected static function payment_on_hold( $order, $response ) {
-		Emspay_Gateway::log( 'Order #' . $order->id . ' payment on hold.');
+		if ( !self::order_has_status( $order, 'on-hold' ) ) {
+			Emspay_Gateway::log( 'Order #' . $order->id . ' payment on hold.');
 
-		// Set order status to failed
-		$order->update_status( 'on-hold', sprintf( __( 'EMS payment pending: %s', 'emspay' ), $response->status )  );
-		$order->reduce_order_stock();
+			// Set order status to failed
+			$order->update_status( 'on-hold', sprintf( __( 'EMS payment pending: %s', 'emspay' ), $response->status )  );
+			$order->reduce_order_stock();
 
-		//WC()->cart->empty_cart();
+  		//WC()->cart->empty_cart();
+		}
 
 		self::maybe_redirect( $order, $response );
+	}
+
+
+	protected static function order_has_status( $order, $status ) {
+		$result = $order->has_status( $status );
+		if ( $result ) {
+			Emspay_Gateway::log( 'Order #' . $order->id . ' is already ' . $status );
+		}
+
+		return $result;
 	}
 
 

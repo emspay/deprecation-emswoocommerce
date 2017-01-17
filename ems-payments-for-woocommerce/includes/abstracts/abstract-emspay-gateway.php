@@ -258,7 +258,7 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 		$hosted_payment = new EmsCore\Request( $this->core_order, $this->core_options );
 		$form_fields = $hosted_payment->getFormFields();
 
-		self::log( 'Payment form fields for Order #' . $order_id . print_r( $form_fields, true ) );
+		self::log( 'Payment form fields for Order #' . $order_id . ' ' . print_r( $form_fields, true ) );
 ?>
 		<form method="post" action="<?php echo $hosted_payment->getFormAction(); ?>">
 		<?php foreach( $form_fields as $name => $value ) { ?>
