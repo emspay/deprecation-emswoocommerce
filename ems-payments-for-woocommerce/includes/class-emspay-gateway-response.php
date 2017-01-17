@@ -93,7 +93,7 @@ class Emspay_Gateway_Response {
 
 
 	protected static function payment_complete( $order, $response ) {
-		if ( !self::order_has_status( $order, 'completed' ) ) {
+		if ( !$order->is_paid() ) {
 			Emspay_Gateway::log( 'Order #' . $order->id . ' payment complete, reference number: ' . $response->ipgTransactionId );
 
 			// Add order note
@@ -107,14 +107,12 @@ class Emspay_Gateway_Response {
 
 
 	protected static function payment_failed( $order, $response ) {
-		if ( !self::order_has_status( $order, 'failed' ) ) {
-			Emspay_Gateway::log( 'Order #' . $order->id . ' payment failed, fail eason: ' . $response->fail_reason );
+		Emspay_Gateway::log( 'Order #' . $order->id . ' payment failed, fail eason: ' . $response->fail_reason );
 
-			// Store meta data to order.
-			update_post_meta( $order->id, '_ems_fail_reason', $response->fail_reason );
-			// Set order status to failed
-			$order->update_status( 'failed', sprintf( __( 'EMS payment error: %s', 'emspay' ), $response->fail_reason ) );
-		}
+		// Store meta data to order.
+		update_post_meta( $order->id, '_ems_fail_reason', $response->fail_reason );
+		// Set order status to failed
+		$order->update_status( 'failed', sprintf( __( 'EMS payment error: %s', 'emspay' ), $response->fail_reason ) );
 
 		if ( !$response->isNotification() ) {
 			wc_add_notice( sprintf( __('Payment error: %s', 'emspay'), $response->fail_reason ), 'error' );
@@ -140,8 +138,6 @@ class Emspay_Gateway_Response {
 
 
 	protected static function order_has_status( $order, $status ) {
-		Emspay_Gateway::log( 'Order #' . $order->id . ' check status: ' . $status . ' has status: ' . $order->get_status() );
-
 		$result = $order->has_status( $status );
 		if ( $result ) {
 			Emspay_Gateway::log( 'Order #' . $order->id . ' is already ' . $status );
