@@ -15,11 +15,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Emspay_Gateway_Maestro extends Emspay_Gateway {
 
-	protected $payment_method = 'MA'; // maestroUK
 
 	protected function define_variables() {
 		$this->id                 = 'ems_maestro';
-		$this->has_fields         = false;
+		$this->has_fields         = true;
 		$this->method_title       = __( 'EMS Maestro', 'emspay' );
 		$this->method_description = __( 'Maestro description.', 'emspay' );
 	}
@@ -39,5 +38,45 @@ class Emspay_Gateway_Maestro extends Emspay_Gateway {
 		return __( 'Paying online with Maestro.', 'emspay' );
 	}
 
+  public function validate_fields() {
+		if ( empty( $_POST  ) || !isset( $_POST['debit_card'] ) || empty( $_POST['debit_card'] ) ) {
+			wc_add_notice( __( 'Choose Debit Card', 'emspay' ), 'error' );
+			return false;
+		}
+
+		$debit_card = stripslashes( $_POST['debit_card'] );
+		if ( !array_key_exists( $debit_card, $this->get_supported_debit_cards() ) ) {
+			wc_add_notice( __( 'Invalid Debit Card', 'emspay' ), 'error' );
+			return false;
+		}
+
+		$this->payment_method = $debit_card;
+
+		return parent::validate_fields();
+	}
+
+	public function payment_fields() {
+		if ( $description = $this->get_description() ) {
+			echo wpautop( wptexturize( $description ) );
+		}
+
+		?>
+		<select name="debit_card" id="debit_card">
+			<option value=""><?php _e('Choose Debit Card', 'emspay') ?></option>
+			<?php foreach ( $this->get_supported_debit_cards() as $option_key => $option_value ): ?>
+				<option<?php selected( $this->payment_method, $option_key ); ?> value="<?php echo esc_attr( $option_key ); ?>"><?php echo esc_html( $option_value ); ?></option>
+			<?php endforeach; ?>
+		</select>
+
+		<?php
+	}
+
+
+	public function get_supported_debit_cards() {
+		return array(
+			'MA'         => __( 'Maestro', 'emspay' ),
+			'maestroUK'  => __( 'Maestro UK', 'emspay' ),
+		);
+	}
 
 }

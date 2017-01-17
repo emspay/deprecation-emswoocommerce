@@ -84,7 +84,7 @@ class Emspay_Gateway_Response {
 
 	protected static function payment_complete( $order, $response ) {
 		// Add order note
-		$order->add_order_note( sprintf( __( 'EMS payment approved (Reference number: %s)', 'emspay' ), $response->refnumber ) );
+		$order->add_order_note( sprintf( __( 'EMS payment approved (Reference number: %s)', 'emspay' ), $response->ipgTransactionId ) );
 		// Payment complete
 		$order->payment_complete( $response->refnumber );
 

@@ -15,6 +15,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 abstract class Emspay_Gateway extends WC_Payment_Gateway {
 
+	/** @var WC_Logger Logger instance */
+	public static $log = false;
+
 	protected $supported_languages = array(
 		'zh_CN', // Chinese (simplified)
 		'zh_TW', // Chinese (traditional)
@@ -36,6 +39,20 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 	protected $default_language = 'en_US';
 
 	protected $payment_method;
+
+	protected $supported_payment_methods = array(
+		'M',          // MasterCard
+		'V',          // Visa (Credit/Debit/Electron/Delta)
+		'C',          // Diners Club
+		'ideal',      // iDEAL
+		'klarna',     // Klarna
+		'MA',         // Maestro
+		'maestroUK',  // Maestro UK
+		'masterpass', // MasterPass
+		'paypal',     // PayPal
+		'sofort',     // SOFORT Banking (Überweisung)
+		'BCMC',       // Bancontact
+	);
 
 	protected $core_option;
 
@@ -82,6 +99,7 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 		add_action( 'woocommerce_receipt_' . $this->id, array( $this, 'receipt_page' ) );
 		//add_action( 'woocommerce_thankyou_' . $this->id, array( $this, 'thankyou_page' ) );
 		add_action( 'woocommerce_api_emspay_gateway', array( 'Emspay_Gateway_Response', 'response_handler' ) );
+		add_filter( 'woocommerce_emspay_' . $this->id . '_hosted_args', array( $this, 'hosted_payment_args' ) );
 	}
 
 
@@ -113,7 +131,8 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 	 * Initialise Gateway Settings Form Fields.
 	 */
 	public function init_form_fields() {
-		$this->form_fields = array(
+		$this->form_fields = array_merge(
+			array(
 			'enabled'   => array(
 				'title'   => __( 'Enable/Disable', 'emspay' ),
 				'type'    => 'checkbox',
@@ -134,9 +153,12 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 				'description' => __( 'This controls the description which the user sees during checkout.', 'emspay' ),
 				'default'     => $this->get_description_field_default()
 			),
-		);
+		), $this->get_extra_form_fields() );
 	}
 
+	public function get_extra_form_fields() {
+		return array();
+	}
 
 	public function get_emspay_language() {
 		$locale = get_locale();
@@ -220,7 +242,7 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 		update_post_meta( $order->id, '_ems_currency_code', $numeric_currency_code );
 		update_post_meta( $order->id, '_ems_payment_method', $this->payment_method );
 
-		$args = apply_filters( 'woocommerce_emspay_hosted_args', array(
+		$args = apply_filters( 'woocommerce_emspay_' . $this->id . '_hosted_args', array(
 			'mobile'          => wp_is_mobile(),
 			'chargetotal'     => $order->get_total(),
 			'orderId'         => $order->id,
@@ -231,6 +253,41 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 			'transactionTime' => $transaction_time,
 		), $order->id );
 
+		return $args;
+	}
+
+
+	/**
+	 * Logging method.
+	 * @param string $message
+	 */
+	public static function log( $message ) {
+		if ( empty( self::$log ) ) {
+			self::$log = new WC_Logger();
+		}
+
+		self::$log->add( 'emspay', $message );
+	}
+
+
+	/**
+	 * Validate frontend fields.
+	 *
+	 * Validate payment fields on the frontend.
+	 *
+	 * @return bool
+	 */
+	public function validate_fields() {
+		if ( !in_array( $this->payment_method, $this->supported_payment_methods ) ) {
+			wc_add_notice( __( 'Invalid payment method.', 'woocommerce' ), 'error' );
+			return false;
+		}
+
+		return true;
+	}
+
+
+	public function hosted_payment_args( $args ) {
 		return $args;
 	}
 
