@@ -140,6 +140,8 @@ class Emspay_Gateway_Response {
 
 
 	protected static function order_has_status( $order, $status ) {
+		Emspay_Gateway::log( 'Order #' . $order->id . ' check status: ' . $status . ' has status: ' . $order->get_status() );
+
 		$result = $order->has_status( $status );
 		if ( $result ) {
 			Emspay_Gateway::log( 'Order #' . $order->id . ' is already ' . $status );
