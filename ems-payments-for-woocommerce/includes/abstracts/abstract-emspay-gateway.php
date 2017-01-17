@@ -99,7 +99,7 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 		add_action( 'woocommerce_receipt_' . $this->id, array( $this, 'receipt_page' ) );
 		//add_action( 'woocommerce_thankyou_' . $this->id, array( $this, 'thankyou_page' ) );
 		add_action( 'woocommerce_api_emspay_gateway', array( 'Emspay_Gateway_Response', 'response_handler' ) );
-		add_filter( 'woocommerce_emspay_' . $this->id . '_hosted_args', array( $this, 'hosted_payment_args' ) );
+		add_filter( 'woocommerce_emspay_' . $this->id . '_hosted_args', array( $this, 'hosted_payment_args' ), 10, 2 );
 	}
 
 
@@ -184,8 +184,31 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 	public function process_payment( $order_id ) {
 		$order = wc_get_order( $order_id );
 
+		$this->save_emspay_meta( $order );
+
 		// Payment form is hosted on EMS
 		return $this->process_hosted_payment( $order );
+	}
+
+
+	protected function save_emspay_meta( $order ) {
+		// Store meta data to order.
+		foreach( $this->get_emspay_meta( $order ) as $key => $value ) {
+			update_post_meta( $order->id, $key, $value );
+		}
+	}
+
+
+	protected function get_emspay_meta( $order ) {
+		$currency_code = $order->get_order_currency();
+		$numeric_currency_code = Emspay_Currency::get_numeric_currency_code( $currency_code );
+		$transaction_time = EmsCore\Order::getDateTime();
+
+		return array(
+			'_ems_txndatetime'     => $transaction_time,
+			'_ems_currency_code'   => $numeric_currency_code,
+			'_ems_payment_method'  => $this->payment_method,
+		);
 	}
 
 
@@ -233,25 +256,16 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 	}
 
 	protected function get_hosted_payment_args( $order ) {
-		$currency_code = $order->get_order_currency();
-		$numeric_currency_code = Emspay_Currency::get_numeric_currency_code( $currency_code );
-		$transaction_time = EmsCore\Order::getDateTime();
-
-		// Store meta data to order.
-		update_post_meta( $order->id, '_ems_txndatetime', $transaction_time );
-		update_post_meta( $order->id, '_ems_currency_code', $numeric_currency_code );
-		update_post_meta( $order->id, '_ems_payment_method', $this->payment_method );
-
 		$args = apply_filters( 'woocommerce_emspay_' . $this->id . '_hosted_args', array(
 			'mobile'          => wp_is_mobile(),
 			'chargetotal'     => $order->get_total(),
 			'orderId'         => $order->id,
 			'language'        => $this->get_emspay_language(),
-			'paymentMethod'   => $this->payment_method,
-			'currency'        => $numeric_currency_code,
+			'paymentMethod'   => $order->ems_payment_method,
+			'currency'        => $order->ems_currency_code,
 			'timezone'        => wc_timezone_string(),
-			'transactionTime' => $transaction_time,
-		), $order->id );
+			'transactionTime' => $order->ems_txndatetime,
+		), $order );
 
 		return $args;
 	}
@@ -287,7 +301,7 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 	}
 
 
-	public function hosted_payment_args( $args ) {
+	public function hosted_payment_args( $args, $order ) {
 		return $args;
 	}
 

@@ -45,6 +45,7 @@ class Emspay_Gateway_Ideal extends Emspay_Gateway {
 		return __( 'iDEAL', 'emspay' );
 	}
 
+
 	public function get_extra_form_fields() {
 		return array(
 			'select_bank'   => array(
@@ -56,9 +57,11 @@ class Emspay_Gateway_Ideal extends Emspay_Gateway {
 		);
 	}
 
+
 	protected function get_description_field_default() {
 		return __( 'Paying online with iDEAL.', 'emspay' );
 	}
+
 
 	public function validate_fields() {
 		if ( $this->select_bank ) {
@@ -78,6 +81,7 @@ class Emspay_Gateway_Ideal extends Emspay_Gateway {
 
 		return parent::validate_fields();
 	}
+
 
 	public function payment_fields() {
 		if ( !$this->select_bank ) {
@@ -100,6 +104,7 @@ class Emspay_Gateway_Ideal extends Emspay_Gateway {
 		<?php
 	}
 
+
 	public function get_issuer_banks() {
 		return array(
 			'ABNANL2A' => __( 'ABN AMRO', 'emspay' ),
@@ -116,12 +121,22 @@ class Emspay_Gateway_Ideal extends Emspay_Gateway {
 	}
 
 
-	public function hosted_payment_args( $args ) {
+	public function hosted_payment_args( $args, $order ) {
 		if ( $this->select_bank ) {
-			$args['idealIssuerID'] = $this->issuer_bank;
+			$args['idealIssuerID'] = $order->ems_idealIssuerID;
 		}
 
 		return $args;
+	}
+
+
+	protected function get_emspay_meta( $order ) {
+		$meta = parent::get_emspay_meta( $order );
+		if ($this->select_bank) {
+			$meta['_ems_idealIssuerID'] = $this->issuer_bank;
+		}
+
+		return $meta;
 	}
 
 
