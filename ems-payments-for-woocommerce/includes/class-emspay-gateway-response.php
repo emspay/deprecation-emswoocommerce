@@ -19,6 +19,8 @@ class Emspay_Gateway_Response {
 	 */
 	public static function response_handler() {
 		if ( ! empty( $_POST ) ) {
+			Emspay_Gateway::log( 'EMS Response ' . print_r( $_POST, true ) );
+
 			$post = wp_unslash( $_POST );
 			$response = new EmsCore\Response( self::get_core_option() );
 
@@ -40,9 +42,17 @@ class Emspay_Gateway_Response {
 						$status = strtolower( $response->status );
 						call_user_func( array( 'Emspay_Gateway_Response', 'payment_status_' . $status ), $order, $response );
 						exit;
+					} else {
+						Emspay_Gateway::log( 'EMS Response invalid transaction' );
 					}
+				} else {
+					Emspay_Gateway::log( 'EMS Response Order #' . $order_id . ' not found' );
 				}
+			} else {
+				Emspay_Gateway::log( 'EMS Response invalid POST data');
 			}
+		} else {
+			Emspay_Gateway::log( 'EMS Response empty POST data');
 		}
 
 		wp_die( 'EMS Response Failure', 'EMS response', 500 );
@@ -83,6 +93,8 @@ class Emspay_Gateway_Response {
 
 
 	protected static function payment_complete( $order, $response ) {
+		Emspay_Gateway::log( 'Order #' . $order->id . ' payment complete, reference number: ' . $response->ipgTransactionId );
+
 		// Add order note
 		$order->add_order_note( sprintf( __( 'EMS payment approved (Reference number: %s)', 'emspay' ), $response->ipgTransactionId ) );
 		// Payment complete
@@ -93,6 +105,8 @@ class Emspay_Gateway_Response {
 
 
 	protected static function payment_failed( $order, $response ) {
+		Emspay_Gateway::log( 'Order #' . $order->id . ' payment failed, fail eason: ' . $response->fail_reason );
+
 		// Store meta data to order.
 		update_post_meta( $order->id, '_ems_fail_reason', $response->fail_reason );
 		// Set order status to failed
@@ -107,6 +121,8 @@ class Emspay_Gateway_Response {
 
 
 	protected static function payment_on_hold( $order, $response ) {
+		Emspay_Gateway::log( 'Order #' . $order->id . ' payment on hold.');
+
 		// Set order status to failed
 		$order->update_status( 'on-hold', sprintf( __( 'EMS payment pending: %s', 'emspay' ), $response->status )  );
 		$order->reduce_order_stock();

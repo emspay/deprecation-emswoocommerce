@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Ems Payments For WooCommerce 1.0.0\n"
-"POT-Creation-Date: 2017-01-17 11:51+0100\n"
+"POT-Creation-Date: 2017-01-17 20:18+0100\n"
 "PO-Revision-Date: 2017-01-10 00:56+0100\n"
 "Last-Translator: \n"
 "Language-Team: DLWT\n"
@@ -17,57 +17,72 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: ../languages\n"
 
-#: abstracts/abstract-emspay-gateway.php:137
+#: abstracts/abstract-emspay-gateway.php:143
 msgid "Enable/Disable"
 msgstr ""
 
-#: abstracts/abstract-emspay-gateway.php:143
+#: abstracts/abstract-emspay-gateway.php:149
 msgid "Title"
 msgstr ""
 
-#: abstracts/abstract-emspay-gateway.php:145
+#: abstracts/abstract-emspay-gateway.php:151
 msgid "This controls the title which the user sees during checkout."
 msgstr ""
 
-#: abstracts/abstract-emspay-gateway.php:150
+#: abstracts/abstract-emspay-gateway.php:156
 msgid "Description"
 msgstr ""
 
-#: abstracts/abstract-emspay-gateway.php:153
+#: abstracts/abstract-emspay-gateway.php:159
 msgid ""
 "This controls the description which the user sees during checkout."
 msgstr ""
 
-#: abstracts/abstract-emspay-gateway.php:214
+#: abstracts/abstract-emspay-gateway.php:163
+msgid "Debug Log"
+msgstr ""
+
+#: abstracts/abstract-emspay-gateway.php:165
+msgid "Enable logging"
+msgstr ""
+
+#: abstracts/abstract-emspay-gateway.php:167
+#, php-format
+msgid ""
+"Log EMS events, such as pay request, response, inside: <br><code>%s</"
+"code>"
+msgstr ""
+
+#: abstracts/abstract-emspay-gateway.php:250
 msgid ""
 "Thank you for your order, please click the button below to pay with "
 "your selected method."
 msgstr ""
 
-#: abstracts/abstract-emspay-gateway.php:229
+#: abstracts/abstract-emspay-gateway.php:267
 msgid "Payment"
 msgstr ""
 
-#: abstracts/abstract-emspay-gateway.php:282
+#: abstracts/abstract-emspay-gateway.php:313
 msgid "Invalid payment method."
-msgstr ""
-
-#: class-emspay-gateway-response.php:87
-#, php-format
-msgid "EMS payment approved (Reference number: %s)"
 msgstr ""
 
 #: class-emspay-gateway-response.php:99
 #, php-format
+msgid "EMS payment approved (Reference number: %s)"
+msgstr ""
+
+#: class-emspay-gateway-response.php:113
+#, php-format
 msgid "EMS payment error: %s"
 msgstr ""
 
-#: class-emspay-gateway-response.php:102
+#: class-emspay-gateway-response.php:116
 #, php-format
 msgid "Payment error: %s"
 msgstr ""
 
-#: class-emspay-gateway-response.php:111
+#: class-emspay-gateway-response.php:127
 #, php-format
 msgid "EMS payment pending: %s"
 msgstr ""
@@ -234,64 +249,64 @@ msgstr ""
 msgid "iDEAL"
 msgstr ""
 
-#: gateways/class-emspay-gateway-ideal.php:51
+#: gateways/class-emspay-gateway-ideal.php:52
 msgid "Show issuer bank select"
 msgstr ""
 
-#: gateways/class-emspay-gateway-ideal.php:53
+#: gateways/class-emspay-gateway-ideal.php:54
 msgid "Let your customers select the issuer bank"
 msgstr ""
 
-#: gateways/class-emspay-gateway-ideal.php:60
+#: gateways/class-emspay-gateway-ideal.php:62
 msgid "Paying online with iDEAL."
 msgstr ""
 
-#: gateways/class-emspay-gateway-ideal.php:66
-#: gateways/class-emspay-gateway-ideal.php:94
+#: gateways/class-emspay-gateway-ideal.php:69
+#: gateways/class-emspay-gateway-ideal.php:98
 msgid "Choose your bank"
 msgstr ""
 
-#: gateways/class-emspay-gateway-ideal.php:72
+#: gateways/class-emspay-gateway-ideal.php:75
 msgid "Invalid bank"
 msgstr ""
 
-#: gateways/class-emspay-gateway-ideal.php:105
+#: gateways/class-emspay-gateway-ideal.php:110
 msgid "ABN AMRO"
 msgstr ""
 
-#: gateways/class-emspay-gateway-ideal.php:106
+#: gateways/class-emspay-gateway-ideal.php:111
 msgid "ING"
 msgstr ""
 
-#: gateways/class-emspay-gateway-ideal.php:107
+#: gateways/class-emspay-gateway-ideal.php:112
 msgid "SNS Bank"
 msgstr ""
 
-#: gateways/class-emspay-gateway-ideal.php:108
+#: gateways/class-emspay-gateway-ideal.php:113
 msgid "van Lanschot"
 msgstr ""
 
-#: gateways/class-emspay-gateway-ideal.php:109
+#: gateways/class-emspay-gateway-ideal.php:114
 msgid "Triodos Bank"
 msgstr ""
 
-#: gateways/class-emspay-gateway-ideal.php:110
+#: gateways/class-emspay-gateway-ideal.php:115
 msgid "Knab"
 msgstr ""
 
-#: gateways/class-emspay-gateway-ideal.php:111
+#: gateways/class-emspay-gateway-ideal.php:116
 msgid "Rabobank"
 msgstr ""
 
-#: gateways/class-emspay-gateway-ideal.php:112
+#: gateways/class-emspay-gateway-ideal.php:117
 msgid "RegioBank"
 msgstr ""
 
-#: gateways/class-emspay-gateway-ideal.php:113
+#: gateways/class-emspay-gateway-ideal.php:118
 msgid "ASN Bank"
 msgstr ""
 
-#: gateways/class-emspay-gateway-ideal.php:114
+#: gateways/class-emspay-gateway-ideal.php:119
 msgid "Bunq"
 msgstr ""
 

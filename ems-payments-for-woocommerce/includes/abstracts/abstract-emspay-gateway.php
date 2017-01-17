@@ -15,6 +15,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 abstract class Emspay_Gateway extends WC_Payment_Gateway {
 
+	/** @var bool Whether or not logging is enabled */
+	public static $log_enabled = false;
+
 	/** @var WC_Logger Logger instance */
 	public static $log = false;
 
@@ -91,6 +94,9 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 		$this->enabled     = $this->get_option( 'enabled', 'yes' );
 		$this->title       = $this->get_option( 'title' );
 		$this->description = $this->get_option( 'description' );
+		$this->debug       = 'yes' === $this->get_option( 'debug', 'no' );
+
+		self::$log_enabled = $this->debug;
 	}
 
 
@@ -152,6 +158,13 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 				'desc_tip'    => true,
 				'description' => __( 'This controls the description which the user sees during checkout.', 'emspay' ),
 				'default'     => $this->get_description_field_default()
+			),
+			'debug' => array(
+				'title'       => __( 'Debug Log', 'emspay' ),
+				'type'        => 'checkbox',
+				'label'       => __( 'Enable logging', 'emspay' ),
+				'default'     => 'no',
+				'description' => sprintf( __( 'Log EMS events, such as pay request, response, inside: <br><code>%s</code>', 'emspay' ), wc_get_log_file_path( 'emspay' ) )
 			),
 		), $this->get_extra_form_fields() );
 	}
@@ -243,10 +256,12 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 
 		// Initialize payment
 		$hosted_payment = new EmsCore\Request( $this->core_order, $this->core_options );
+		$form_fields = $hosted_payment->getFormFields();
 
+		self::log( 'Payment form fields for Order #' . $order_id . print_r( $form_fields, true ) );
 ?>
 		<form method="post" action="<?php echo $hosted_payment->getFormAction(); ?>">
-		<?php foreach( $hosted_payment->getFormFields() as $name => $value ) { ?>
+		<?php foreach( $form_fields as $name => $value ) { ?>
 			<input type="hidden" name="<?php echo $name; ?>" value="<?php echo esc_attr( $value ); ?>">
 		<?php } ?>
 			<input type="submit" class="button" value="<?php esc_attr_e( 'Payment', 'emspay' ); ?>" />
@@ -276,11 +291,13 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 	 * @param string $message
 	 */
 	public static function log( $message ) {
-		if ( empty( self::$log ) ) {
-			self::$log = new WC_Logger();
-		}
+		if ( self::$log_enabled ) {
+			if ( empty( self::$log ) ) {
+				self::$log = new WC_Logger();
+			}
 
-		self::$log->add( 'emspay', $message );
+			self::$log->add( 'emspay', $message );
+		}
 	}
 
 
