@@ -43,13 +43,13 @@ class Emspay_Gateway_Response {
 						call_user_func( array( 'Emspay_Gateway_Response', 'payment_status_' . $status ), $order, $response );
 						exit;
 					} else {
-						Emspay_Gateway::log( 'EMS Response invalid transaction' );
+						Emspay_Gateway::log( 'EMS Response invalid transaction: ' . $response->getError() );
 					}
 				} else {
 					Emspay_Gateway::log( 'EMS Response Order #' . $order_id . ' not found' );
 				}
 			} else {
-				Emspay_Gateway::log( 'EMS Response invalid POST data');
+				Emspay_Gateway::log( 'EMS Response invalid POST data: ' . $response->getError() );
 			}
 		} else {
 			Emspay_Gateway::log( 'EMS Response empty POST data');
