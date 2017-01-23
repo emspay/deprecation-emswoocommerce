@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Ems Payments For WooCommerce 1.0.0\n"
-"POT-Creation-Date: 2017-01-17 20:18+0100\n"
+"POT-Creation-Date: 2017-01-23 12:27+0100\n"
 "PO-Revision-Date: 2017-01-10 00:56+0100\n"
 "Last-Translator: \n"
 "Language-Team: DLWT\n"
@@ -67,22 +67,22 @@ msgstr ""
 msgid "Invalid payment method."
 msgstr ""
 
-#: class-emspay-gateway-response.php:99
+#: class-emspay-gateway-response.php:100
 #, php-format
 msgid "EMS payment approved (Reference number: %s)"
 msgstr ""
 
-#: class-emspay-gateway-response.php:113
+#: class-emspay-gateway-response.php:117
 #, php-format
 msgid "EMS payment error: %s"
 msgstr ""
 
-#: class-emspay-gateway-response.php:116
+#: class-emspay-gateway-response.php:120
 #, php-format
 msgid "Payment error: %s"
 msgstr ""
 
-#: class-emspay-gateway-response.php:127
+#: class-emspay-gateway-response.php:132
 #, php-format
 msgid "EMS payment pending: %s"
 msgstr ""
@@ -192,44 +192,61 @@ msgstr ""
 msgid "Paying online with Bancontact."
 msgstr ""
 
-#: gateways/class-emspay-gateway-creditcard.php:21
+#: gateways/class-emspay-gateway-creditcard.php:23
 msgid "EMS Creditcard"
 msgstr ""
 
-#: gateways/class-emspay-gateway-creditcard.php:22
+#: gateways/class-emspay-gateway-creditcard.php:24
 msgid "Creditcard description."
 msgstr ""
 
-#: gateways/class-emspay-gateway-creditcard.php:27
+#: gateways/class-emspay-gateway-creditcard.php:36
 msgid "Enable Creditcard"
 msgstr ""
 
-#: gateways/class-emspay-gateway-creditcard.php:32
+#: gateways/class-emspay-gateway-creditcard.php:41
 msgid "Creditcard"
 msgstr ""
 
-#: gateways/class-emspay-gateway-creditcard.php:37
+#: gateways/class-emspay-gateway-creditcard.php:46
 msgid "Paying online with Creditcard."
 msgstr ""
 
-#: gateways/class-emspay-gateway-creditcard.php:43
-#: gateways/class-emspay-gateway-creditcard.php:65
+#: gateways/class-emspay-gateway-creditcard.php:53
+msgid "3D Secure transactions"
+msgstr ""
+
+#: gateways/class-emspay-gateway-creditcard.php:54
+msgid ""
+"Enable Secure transactions <br>(If your credit card agreement "
+"includes 3D Secure and your Merchant ID has been activated to use "
+"this service.)"
+msgstr ""
+
+#: gateways/class-emspay-gateway-creditcard.php:56
+msgid ""
+"The ability to authenticate transactions using Verified by Visa, "
+"MasterCard SecureCode."
+msgstr ""
+
+#: gateways/class-emspay-gateway-creditcard.php:66
+#: gateways/class-emspay-gateway-creditcard.php:88
 msgid "Choose Credit Card"
 msgstr ""
 
-#: gateways/class-emspay-gateway-creditcard.php:49
+#: gateways/class-emspay-gateway-creditcard.php:72
 msgid "Invalid Credit Card brand"
 msgstr ""
 
-#: gateways/class-emspay-gateway-creditcard.php:77
+#: gateways/class-emspay-gateway-creditcard.php:100
 msgid "MasterCard"
 msgstr ""
 
-#: gateways/class-emspay-gateway-creditcard.php:78
+#: gateways/class-emspay-gateway-creditcard.php:101
 msgid "Visa"
 msgstr ""
 
-#: gateways/class-emspay-gateway-creditcard.php:79
+#: gateways/class-emspay-gateway-creditcard.php:102
 msgid "Diners Club"
 msgstr ""
 

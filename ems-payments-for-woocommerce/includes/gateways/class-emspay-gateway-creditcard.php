@@ -15,11 +15,20 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Emspay_Gateway_Creditcard extends Emspay_Gateway {
 
+	protected $authenticate_transaction = false;
+
 	protected function define_variables() {
 		$this->id                 = 'ems_creditcard';
 		$this->has_fields         = true;
 		$this->method_title       = __( 'EMS Creditcard', 'emspay' );
 		$this->method_description = __( 'Creditcard description.', 'emspay' );
+	}
+
+
+	public function load_options() {
+		parent::load_options();
+
+		$this->authenticate_transaction = 'yes' === $this->get_option( '3d_secure', 'no' );
 	}
 
 
@@ -35,6 +44,20 @@ class Emspay_Gateway_Creditcard extends Emspay_Gateway {
 
 	protected function get_description_field_default() {
 		return __( 'Paying online with Creditcard.', 'emspay' );
+	}
+
+
+	public function get_extra_form_fields() {
+		return array(
+			'3d_secure' => array(
+				'title'       => __( '3D Secure transactions', 'emspay' ),
+				'label'       => __( 'Enable Secure transactions <br>(If your credit card agreement includes 3D Secure and your Merchant ID has been activated to use this service.)', 'emspay' ),
+				'type'        => 'checkbox',
+				'description' => __( 'The ability to authenticate transactions using Verified by Visa, MasterCard SecureCode.', 'emspay' ),
+				'default'     => 'no',
+				'desc_tip'    => true,
+			),
+		);
 	}
 
 
@@ -78,6 +101,15 @@ class Emspay_Gateway_Creditcard extends Emspay_Gateway {
 			'V' => __( 'Visa', 'emspay' ),
 			'C' => __( 'Diners Club', 'emspay' ),
 		);
+	}
+
+
+	public function hosted_payment_args( $args, $order ) {
+		if ( !$this->authenticate_transaction ) {
+			$args['authenticateTransaction'] = $this->authenticate_transaction;
+		}
+
+		return $args;
 	}
 
 
