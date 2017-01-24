@@ -309,6 +309,9 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 			array(
 				'mobile'          => wp_is_mobile(),
 				'chargetotal'     => $order->get_total(),
+				'shipping'        => $order->get_total_shipping(),
+				'vattax'          => $order->get_total_tax(),
+				'subtotal'        => $order->get_subtotal(),
 				'orderId'         => $order->id,
 				'language'        => $this->get_emspay_language(),
 				'paymentMethod'   => $order->ems_payment_method,
