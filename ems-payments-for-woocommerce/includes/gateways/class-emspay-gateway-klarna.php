@@ -17,6 +17,10 @@ class Emspay_Gateway_Klarna extends Emspay_Gateway {
 
 	protected $payment_method = 'klarna';
 
+	protected $supported_checkout_options = array(
+		'classic',
+	);
+
 	protected function define_variables() {
 		$this->id                 = 'ems_klarna';
 		$this->has_fields         = false;

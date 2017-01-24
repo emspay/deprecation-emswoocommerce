@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Ems Payments For WooCommerce 1.0.0\n"
-"POT-Creation-Date: 2017-01-23 12:27+0100\n"
+"POT-Creation-Date: 2017-01-24 11:47+0100\n"
 "PO-Revision-Date: 2017-01-10 00:56+0100\n"
 "Last-Translator: \n"
 "Language-Team: DLWT\n"
@@ -17,53 +17,62 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: ../languages\n"
 
-#: abstracts/abstract-emspay-gateway.php:143
+#: abstracts/abstract-emspay-gateway.php:128
+msgid "Gateway Disabled"
+msgstr ""
+
+#: abstracts/abstract-emspay-gateway.php:128
+#, php-format
+msgid "Gateway does not support selected checkout option: %s."
+msgstr ""
+
+#: abstracts/abstract-emspay-gateway.php:173
 msgid "Enable/Disable"
 msgstr ""
 
-#: abstracts/abstract-emspay-gateway.php:149
+#: abstracts/abstract-emspay-gateway.php:179
 msgid "Title"
 msgstr ""
 
-#: abstracts/abstract-emspay-gateway.php:151
+#: abstracts/abstract-emspay-gateway.php:181
 msgid "This controls the title which the user sees during checkout."
 msgstr ""
 
-#: abstracts/abstract-emspay-gateway.php:156
+#: abstracts/abstract-emspay-gateway.php:186
 msgid "Description"
 msgstr ""
 
-#: abstracts/abstract-emspay-gateway.php:159
+#: abstracts/abstract-emspay-gateway.php:189
 msgid ""
 "This controls the description which the user sees during checkout."
 msgstr ""
 
-#: abstracts/abstract-emspay-gateway.php:163
+#: abstracts/abstract-emspay-gateway.php:193
 msgid "Debug Log"
 msgstr ""
 
-#: abstracts/abstract-emspay-gateway.php:165
+#: abstracts/abstract-emspay-gateway.php:195
 msgid "Enable logging"
 msgstr ""
 
-#: abstracts/abstract-emspay-gateway.php:167
+#: abstracts/abstract-emspay-gateway.php:197
 #, php-format
 msgid ""
 "Log EMS events, such as pay request, response, inside: <br><code>%s</"
 "code>"
 msgstr ""
 
-#: abstracts/abstract-emspay-gateway.php:250
+#: abstracts/abstract-emspay-gateway.php:283
 msgid ""
 "Thank you for your order, please click the button below to pay with "
 "your selected method."
 msgstr ""
 
-#: abstracts/abstract-emspay-gateway.php:267
+#: abstracts/abstract-emspay-gateway.php:300
 msgid "Payment"
 msgstr ""
 
-#: abstracts/abstract-emspay-gateway.php:313
+#: abstracts/abstract-emspay-gateway.php:385
 msgid "Invalid payment method."
 msgstr ""
 
@@ -327,23 +336,23 @@ msgstr ""
 msgid "Bunq"
 msgstr ""
 
-#: gateways/class-emspay-gateway-klarna.php:23
+#: gateways/class-emspay-gateway-klarna.php:27
 msgid "EMS Klarna"
 msgstr ""
 
-#: gateways/class-emspay-gateway-klarna.php:24
+#: gateways/class-emspay-gateway-klarna.php:28
 msgid "Klarna description."
 msgstr ""
 
-#: gateways/class-emspay-gateway-klarna.php:29
+#: gateways/class-emspay-gateway-klarna.php:33
 msgid "Enable Klarna"
 msgstr ""
 
-#: gateways/class-emspay-gateway-klarna.php:34
+#: gateways/class-emspay-gateway-klarna.php:38
 msgid "Klarna"
 msgstr ""
 
-#: gateways/class-emspay-gateway-klarna.php:39
+#: gateways/class-emspay-gateway-klarna.php:43
 msgid "Paying online with Klarna."
 msgstr ""
 

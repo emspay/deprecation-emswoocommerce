@@ -57,9 +57,16 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 		'BCMC',       // Bancontact
 	);
 
+	protected $supported_checkout_options = array(
+		'classic',
+		'combinedpage',
+	);
+
 	protected $core_option;
 
 	protected $core_order;
+
+	protected $integration;
 
 	/**
 	 * Init and hook in the integration.
@@ -68,6 +75,8 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 	 * @return Emspay_Gateway
 	 */
 	public function __construct() {
+		// Get the integration settings
+		$this->integration = emspay_gateway()->get_integration();
 
 		$this->define_variables();
 
@@ -81,6 +90,7 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 		$this->init_gateway();
 	}
 
+
 	abstract protected function define_variables();
 
 	abstract protected function get_enabled_field_label();
@@ -88,6 +98,7 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 	abstract protected function get_title_field_default();
 
 	abstract protected function get_description_field_default();
+
 
 	public function load_options() {
 		// Define user set variables.
@@ -97,6 +108,26 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 		$this->debug       = 'yes' === $this->get_option( 'debug', 'no' );
 
 		self::$log_enabled = $this->debug;
+
+		if ( ! $this->is_valid_for_use() ) {
+			$this->enabled = 'no';
+		}
+	}
+
+
+	public function is_valid_for_use() {
+		return in_array( $this->integration->checkoutoption, $this->supported_checkout_options );
+	}
+
+
+	public function admin_options() {
+		if ( $this->is_valid_for_use() ) {
+			parent::admin_options();
+		} else {
+			?>
+			<div class="inline error"><p><strong><?php _e( 'Gateway Disabled', 'emspay' ); ?></strong>: <?php echo sprintf( __( 'Gateway does not support selected checkout option: %s.', 'emspay' ), $this->integration->checkoutoption ); ?></p></div>
+			<?php
+		}
 	}
 
 
@@ -118,15 +149,14 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 
 
 	protected function set_core_options() {
-		$integration = emspay_gateway()->get_integration();
 		$url = WC()->api_request_url( 'Emspay_Gateway' );
 
 		$this->core_options
-			->setStoreName($integration->storename)
-			->setSharedSecret($integration->sharedsecret)
-			->setEnvironment($integration->environment)
-			->setCheckoutOption($integration->checkoutoption)
-			->setPayMode($integration->mode)
+			->setStoreName($this->integration->storename)
+			->setSharedSecret($this->integration->sharedsecret)
+			->setEnvironment($this->integration->environment)
+			->setCheckoutOption($this->integration->checkoutoption)
+			->setPayMode($this->integration->mode)
 			->setFailUrl($url)
 			->setSuccessUrl($url)
 			->setIpnUrl($url);
@@ -169,9 +199,11 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 		), $this->get_extra_form_fields() );
 	}
 
+
 	public function get_extra_form_fields() {
 		return array();
 	}
+
 
 	public function get_emspay_language() {
 		$locale = get_locale();
@@ -182,6 +214,7 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 
 		return $locale;
 	}
+
 
 	// TODO do we need to show something special here ?
 	public function thankyou_page() {
@@ -270,19 +303,58 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 <?php
 	}
 
+
 	protected function get_hosted_payment_args( $order ) {
-		$args = apply_filters( 'woocommerce_emspay_' . $this->id . '_hosted_args', array(
-			'mobile'          => wp_is_mobile(),
-			'chargetotal'     => $order->get_total(),
-			'orderId'         => $order->id,
-			'language'        => $this->get_emspay_language(),
-			'paymentMethod'   => $order->ems_payment_method,
-			'currency'        => $order->ems_currency_code,
-			'timezone'        => wc_timezone_string(),
-			'transactionTime' => $order->ems_txndatetime,
+		$args = apply_filters( 'woocommerce_emspay_' . $this->id . '_hosted_args', array_merge(
+			array(
+				'mobile'          => wp_is_mobile(),
+				'chargetotal'     => $order->get_total(),
+				'orderId'         => $order->id,
+				'language'        => $this->get_emspay_language(),
+				'paymentMethod'   => $order->ems_payment_method,
+				'currency'        => $order->ems_currency_code,
+				'timezone'        => wc_timezone_string(),
+				'transactionTime' => $order->ems_txndatetime,
+			),
+			$this->get_billing_args( $order ),
+			$this->get_shipping_args( $order )
 		), $order );
 
 		return $args;
+	}
+
+
+	protected function get_billing_args( $order ) {
+		$billing_args = array();
+		if ( in_array( $this->integration->mode, array( 'payplus', 'fullpay' ) ) ) {
+			$billing_args['bname']    = $order->billing_first_name . ' ' . $order->billing_last_name;
+			$billing_args['bcompany'] = $order->billing_company;
+			$billing_args['baddr1']   = $order->billing_address_1;
+			$billing_args['baddr2']   = $order->billing_address_2;
+			$billing_args['bcity']    = $order->billing_city;
+			$billing_args['bstate']   = $order->billing_state;
+			$billing_args['bcountry'] = $order->billing_country;
+			$billing_args['bzip']     = $order->billing_postcode;
+			$billing_args['phone']    = $order->billing_phone;
+			$billing_args['email']    = $order->billing_email;
+		}
+
+		return $billing_args;
+	}
+
+	protected function get_shipping_args( $order ) {
+		$shipping_args = array();
+		if ( $this->integration->mode == 'fullpay' ) {
+			$shipping_args['bname']    = $order->shipping_first_name . ' ' . $order->shipping_last_name;
+			$shipping_args['baddr1']   = $order->shipping_address_1;
+			$shipping_args['baddr2']   = $order->shipping_address_2;
+			$shipping_args['bcity']    = $order->shipping_city;
+			$shipping_args['bstate']   = $order->shipping_state;
+			$shipping_args['bcountry'] = $order->shipping_country;
+			$shipping_args['bzip']     = $order->shipping_postcode;
+		}
+
+		return $shipping_args;
 	}
 
 
@@ -310,7 +382,7 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 	 */
 	public function validate_fields() {
 		if ( !in_array( $this->payment_method, $this->supported_payment_methods ) ) {
-			wc_add_notice( __( 'Invalid payment method.', 'woocommerce' ), 'error' );
+			wc_add_notice( __( 'Invalid payment method.', 'emspay' ), 'error' );
 			return false;
 		}
 
