@@ -332,7 +332,7 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 			$billing_args['baddr1']   = $order->billing_address_1;
 			$billing_args['baddr2']   = $order->billing_address_2;
 			$billing_args['bcity']    = $order->billing_city;
-			$billing_args['bstate']   = $order->billing_state;
+			$billing_args['bstate']   = $this->get_state_name( $order->billing_country, $order->billing_state );
 			$billing_args['bcountry'] = $order->billing_country;
 			$billing_args['bzip']     = $order->billing_postcode;
 			$billing_args['phone']    = $order->billing_phone;
@@ -349,12 +349,23 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 			$shipping_args['baddr1']   = $order->shipping_address_1;
 			$shipping_args['baddr2']   = $order->shipping_address_2;
 			$shipping_args['bcity']    = $order->shipping_city;
-			$shipping_args['bstate']   = $order->shipping_state;
+			$shipping_args['bstate']   = $this->get_state_name( $order->shipping_country, $order->shipping_state );
 			$shipping_args['bcountry'] = $order->shipping_country;
 			$shipping_args['bzip']     = $order->shipping_postcode;
 		}
 
 		return $shipping_args;
+	}
+
+
+	protected function get_state_name( $country_code, $state ) {
+		$states = WC()->countries->get_states( $country_code );
+
+		if ( isset( $states[ $state ] ) ) {
+			return $states[ $state ];
+		}
+
+		return $state;
 	}
 
 
