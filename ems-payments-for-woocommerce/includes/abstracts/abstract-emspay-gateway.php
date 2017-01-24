@@ -330,7 +330,7 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 	protected function get_billing_args( $order ) {
 		$billing_args = array();
 		if ( in_array( $this->integration->mode, array( 'payplus', 'fullpay' ) ) ) {
-			$billing_args['bname']    = $order->billing_first_name . ' ' . $order->billing_last_name;
+			$billing_args['bname']    = $order->get_formatted_billing_full_name();
 			$billing_args['bcompany'] = $order->billing_company;
 			$billing_args['baddr1']   = $order->billing_address_1;
 			$billing_args['baddr2']   = $order->billing_address_2;
@@ -348,13 +348,13 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 	protected function get_shipping_args( $order ) {
 		$shipping_args = array();
 		if ( $this->integration->mode == 'fullpay' ) {
-			$shipping_args['bname']    = $order->shipping_first_name . ' ' . $order->shipping_last_name;
-			$shipping_args['baddr1']   = $order->shipping_address_1;
-			$shipping_args['baddr2']   = $order->shipping_address_2;
-			$shipping_args['bcity']    = $order->shipping_city;
-			$shipping_args['bstate']   = $this->get_state_name( $order->shipping_country, $order->shipping_state );
-			$shipping_args['bcountry'] = $order->shipping_country;
-			$shipping_args['bzip']     = $order->shipping_postcode;
+			$shipping_args['sname']    = $order->get_formatted_shipping_full_name();
+			$shipping_args['saddr1']   = $order->shipping_address_1;
+			$shipping_args['saddr2']   = $order->shipping_address_2;
+			$shipping_args['scity']    = $order->shipping_city;
+			$shipping_args['sstate']   = $this->get_state_name( $order->shipping_country, $order->shipping_state );
+			$shipping_args['scountry'] = $order->shipping_country;
+			$shipping_args['szip']     = $order->shipping_postcode;
 		}
 
 		return $shipping_args;
