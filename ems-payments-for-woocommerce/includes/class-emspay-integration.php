@@ -54,7 +54,6 @@ class Emspay_Integration extends WC_Integration {
 
 		$this->id                 = 'emspay';
 		$this->method_title       = __( 'EMS e-Commerce Gateway', 'emspay' );
-		$this->method_description = __( 'Allow customers to conveniently checkout directly with EMS e-Commerce Gateway.', 'emspay' );
 
 		// Load the settings.
 		$this->init_form_fields();
@@ -146,6 +145,48 @@ class Emspay_Integration extends WC_Integration {
 
 
 	/**
+	 * Output the gateway settings screen.
+	 */
+	public function admin_options() {
+		?>
+		<h2><?php esc_html_e( $this->get_method_title() ) ?></h2>
+		<div class="card">
+			<h2><?php esc_html_e( 'Are you already a customer ?', 'emspay' ) ?></h2>
+			<p>
+			<?php esc_html_e( 'If you are already registered as an EMS merchant then please enter the credentials and settings below.', 'emspay' ) ?>
+			<br/><br/>
+			<?php esc_html_e( 'For new customers please follow the link below to acquire an EMS merchant account.', 'emspay' ) ?>
+			</p>
+
+			<h2><?php esc_html_e( 'Becoming an EMS customer', 'emspay' ) ?></h2>
+			<p>
+			<?php esc_html_e( 'Get a merchant account via this link:', 'emspay' ) ?>
+			<a target="_blank" rel="external" href="https://www.emspay.eu/en/request-an-offer">https://www.emspay.eu/en/request-an-offer</a>
+			</p>
+
+			<h2><?php esc_html_e( 'Contact EMS Support', 'emspay' ) ?></h2>
+			<p>
+			<?php esc_html_e( 'Visit the FAQ:', 'emspay' ) ?>
+			<br/>
+			<a target="_blank" rel="external" href="http://www.emspay.eu/en/customer-service/faq">http://www.emspay.eu/en/customer-service/faq</a>
+			<br/><br/>
+			<?php esc_html_e( 'Contact information:', 'emspay' ) ?>
+			<br/>
+			<a target="_blank" rel="external" href="https://www.emspay.eu/en/about-ems/contact">https://www.emspay.eu/en/about-ems/contact</a>
+			<br/>
+			</p>
+		</div>
+
+		<div><input type="hidden" name="section" value="<?php esc_attr_e( $this->id ) ?>" /></div>
+		<table class="form-table">
+		<?php echo $this->generate_settings_html( $this->get_form_fields(), false ) ?>
+
+		</table>
+		<?php
+	}
+
+
+	/**
 	 * Validate the Store Name
 	 *
 	 * @since  1.0.0
@@ -159,7 +200,7 @@ class Emspay_Integration extends WC_Integration {
 	}
 
 
-  /**
+	/**
 	 * Validate the Shared Secret
 	 *
 	 * @since  1.0.0

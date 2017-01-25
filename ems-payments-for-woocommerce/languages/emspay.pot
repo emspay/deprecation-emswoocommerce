@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Ems Payments For WooCommerce 1.0.0\n"
-"POT-Creation-Date: 2017-01-24 11:47+0100\n"
+"POT-Creation-Date: 2017-01-25 12:05+0100\n"
 "PO-Revision-Date: 2017-01-10 00:56+0100\n"
 "Last-Translator: \n"
 "Language-Team: DLWT\n"
@@ -13,7 +13,7 @@ msgstr ""
 "X-Generator: Poedit 1.8.11\n"
 "X-Poedit-Basepath: ../includes\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Poedit-KeywordsList: __;_e;esc_attr_e\n"
+"X-Poedit-KeywordsList: __;_e;esc_attr_e;esc_html_e\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: ../languages\n"
 
@@ -72,7 +72,7 @@ msgstr ""
 msgid "Payment"
 msgstr ""
 
-#: abstracts/abstract-emspay-gateway.php:385
+#: abstracts/abstract-emspay-gateway.php:399
 msgid "Invalid payment method."
 msgstr ""
 
@@ -100,83 +100,113 @@ msgstr ""
 msgid "EMS e-Commerce Gateway"
 msgstr ""
 
-#: class-emspay-integration.php:57
-msgid ""
-"Allow customers to conveniently checkout directly with EMS e-Commerce "
-"Gateway."
-msgstr ""
-
-#: class-emspay-integration.php:86 class-emspay-integration.php:158
+#: class-emspay-integration.php:85 class-emspay-integration.php:199
 msgid "Store Name"
 msgstr ""
 
-#: class-emspay-integration.php:88
+#: class-emspay-integration.php:87
 msgid "This is the ID of the store provided by EMS."
 msgstr ""
 
-#: class-emspay-integration.php:93 class-emspay-integration.php:172
+#: class-emspay-integration.php:92 class-emspay-integration.php:213
 msgid "Shared Secret"
 msgstr ""
 
-#: class-emspay-integration.php:95
+#: class-emspay-integration.php:94
 msgid "This is the shared secret provided to you by EMS."
 msgstr ""
 
-#: class-emspay-integration.php:100
+#: class-emspay-integration.php:99
 msgid "Checkout option"
 msgstr ""
 
-#: class-emspay-integration.php:103
+#: class-emspay-integration.php:102
 msgid "This field allows you to set the checkout option."
 msgstr ""
 
-#: class-emspay-integration.php:108
+#: class-emspay-integration.php:107
 msgid "classic"
 msgstr ""
 
-#: class-emspay-integration.php:112
+#: class-emspay-integration.php:111
 msgid "combinedpage"
 msgstr ""
 
-#: class-emspay-integration.php:116
+#: class-emspay-integration.php:115
 msgid "Pay mode"
 msgstr ""
 
-#: class-emspay-integration.php:119
+#: class-emspay-integration.php:118
 msgid "This field allows you to chosen mode for the transaction."
 msgstr ""
 
-#: class-emspay-integration.php:125
+#: class-emspay-integration.php:124
 msgid "payonly"
 msgstr ""
 
-#: class-emspay-integration.php:127
+#: class-emspay-integration.php:126
 msgid "payplus"
 msgstr ""
 
-#: class-emspay-integration.php:129
+#: class-emspay-integration.php:128
 msgid "fullpay"
 msgstr ""
 
-#: class-emspay-integration.php:133
+#: class-emspay-integration.php:132
 msgid "Environment"
 msgstr ""
 
-#: class-emspay-integration.php:136
+#: class-emspay-integration.php:135
 msgid ""
 "This setting specifies whether you will process live transactions, or "
 "whether you will process simulated transactions."
 msgstr ""
 
-#: class-emspay-integration.php:140
+#: class-emspay-integration.php:139
 msgid "Integration"
 msgstr ""
 
-#: class-emspay-integration.php:141
+#: class-emspay-integration.php:140
 msgid "Production"
 msgstr ""
 
-#: class-emspay-integration.php:189
+#: class-emspay-integration.php:154
+msgid "Are you already a customer ?"
+msgstr ""
+
+#: class-emspay-integration.php:156
+msgid ""
+"If you are already registered as an EMS merchant then please enter "
+"the credentials and settings below."
+msgstr ""
+
+#: class-emspay-integration.php:158
+msgid ""
+"For new customers please follow the link below to acquire an EMS "
+"merchant account."
+msgstr ""
+
+#: class-emspay-integration.php:161
+msgid "Becoming an EMS customer"
+msgstr ""
+
+#: class-emspay-integration.php:163
+msgid "Get a merchant account via this link:"
+msgstr ""
+
+#: class-emspay-integration.php:167
+msgid "Contact EMS Support"
+msgstr ""
+
+#: class-emspay-integration.php:169
+msgid "Visit the FAQ:"
+msgstr ""
+
+#: class-emspay-integration.php:173
+msgid "Contact information:"
+msgstr ""
+
+#: class-emspay-integration.php:230
 #, php-format
 msgid "Error: You must enter %s."
 msgstr ""
