@@ -68,6 +68,8 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 
 	protected $integration;
 
+	protected $disabled_error;
+
 	/**
 	 * Init and hook in the integration.
 	 *
@@ -116,7 +118,24 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 
 
 	public function is_valid_for_use() {
+		if ( ! $this->is_checkout_option_supported() ) {
+			$this->disabled_error = sprintf( __( 'Gateway does not supports selected checkout option: %s.', 'emspay' ), $this->integration->checkoutoption );
+			return false;
+		}
+
+		return true;
+	}
+
+
+	public function is_checkout_option_supported() {
 		return in_array( $this->integration->checkoutoption, $this->supported_checkout_options );
+	}
+
+
+	public function show_gateway_disabled_error() {
+		?>
+		<div class="inline error"><p><strong><?php _e( 'Gateway Disabled', 'emspay' ); ?></strong>: <?php echo $this->disabled_error; ?></p></div>
+		<?php
 	}
 
 
@@ -124,9 +143,7 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 		if ( $this->is_valid_for_use() ) {
 			parent::admin_options();
 		} else {
-			?>
-			<div class="inline error"><p><strong><?php _e( 'Gateway Disabled', 'emspay' ); ?></strong>: <?php echo sprintf( __( 'Gateway does not support selected checkout option: %s.', 'emspay' ), $this->integration->checkoutoption ); ?></p></div>
-			<?php
+			$this->show_gateway_disabled_error();
 		}
 	}
 
