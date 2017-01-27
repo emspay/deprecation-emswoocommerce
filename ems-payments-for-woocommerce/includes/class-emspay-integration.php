@@ -180,7 +180,6 @@ class Emspay_Integration extends WC_Integration {
 		<div><input type="hidden" name="section" value="<?php esc_attr_e( $this->id ) ?>" /></div>
 		<table class="form-table">
 		<?php echo $this->generate_settings_html( $this->get_form_fields(), false ) ?>
-
 		</table>
 		<?php
 	}

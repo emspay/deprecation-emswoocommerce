@@ -21,6 +21,7 @@ class Emspay_Gateway_Maestro extends Emspay_Gateway {
 		$this->has_fields         = true;
 		$this->method_title       = __( 'EMS Maestro', 'emspay' );
 		$this->method_description = __( 'Maestro description.', 'emspay' );
+		$this->icon               = plugin_dir_url( EMSPAY_PLUGIN_FILE ) . 'assets/images/icons/maestro.png';
 	}
 
 

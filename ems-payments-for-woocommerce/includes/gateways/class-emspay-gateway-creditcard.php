@@ -104,12 +104,38 @@ class Emspay_Gateway_Creditcard extends Emspay_Gateway {
 	}
 
 
+	public function get_cc_brands_icon() {
+		return array(
+			'M' => plugin_dir_url( EMSPAY_PLUGIN_FILE ) . 'assets/images/icons/mastercard.png',
+			'V' => plugin_dir_url( EMSPAY_PLUGIN_FILE ) . 'assets/images/icons/visa.png',
+			'C' => plugin_dir_url( EMSPAY_PLUGIN_FILE ) . 'assets/images/icons/diners.png',
+		);
+	}
+
+
 	public function hosted_payment_args( $args, $order ) {
 		if ( !$this->authenticate_transaction ) {
 			$args['authenticateTransaction'] = $this->authenticate_transaction;
 		}
 
 		return $args;
+	}
+
+
+	/**
+	 * Get gateway icon.
+	 * @return string
+	 */
+	public function get_icon() {
+		$cc_brands = $this->get_supported_cc_brands();
+		$icons = $this->get_cc_brands_icon();
+		$icon_html = '';
+
+		foreach ( $icons as $brand => $icon_url ) {
+			$icon_html .= '<img src="' .  WC_HTTPS::force_https_url( $icon_url ) . '" alt="' . esc_attr__( $cc_brands[ $brand ] ) . '" />';
+		}
+
+		return apply_filters( 'woocommerce_gateway_icon', $icon_html, $this->id );
 	}
 
 

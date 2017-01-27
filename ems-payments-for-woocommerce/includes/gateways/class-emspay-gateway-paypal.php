@@ -22,6 +22,7 @@ class Emspay_Gateway_Paypal extends Emspay_Gateway {
 		$this->has_fields         = false;
 		$this->method_title       = __( 'EMS Paypal', 'emspay' );
 		$this->method_description = __( 'Paypal description.', 'emspay' );
+		$this->icon               = 'https://www.paypalobjects.com/webstatic/en_US/i/buttons/pp-acceptance-small.png';
 	}
 
 

@@ -71,8 +71,30 @@ final class Emspay_Gateway_Plugin {
 	 * @since  1.0.0
 	 */
 	public function __construct() {
+		$this->define_constants();
 		$this->includes();
 		$this->init_hooks();
+	}
+
+
+	/**
+	 * Define Pugin Constants.
+	 */
+	private function define_constants() {
+		$this->define( 'EMSPAY_PLUGIN_FILE', __FILE__ );
+	}
+
+
+	/**
+	 * Define constant if not already set.
+	 *
+	 * @param  string $name
+	 * @param  string|bool $value
+	 */
+	private function define( $name, $value ) {
+		if ( ! defined( $name ) ) {
+			define( $name, $value );
+		}
 	}
 
 
