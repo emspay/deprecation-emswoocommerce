@@ -22,6 +22,7 @@ class Emspay_Gateway_Sofort extends Emspay_Gateway {
 		$this->has_fields         = false;
 		$this->method_title       = __( 'EMS Sofort', 'emspay' );
 		$this->method_description = __( 'Sofort description.', 'emspay' );
+		$this->icon               = plugin_dir_url( EMSPAY_PLUGIN_FILE ) . 'assets/images/icons/sofort.png';
 	}
 
 

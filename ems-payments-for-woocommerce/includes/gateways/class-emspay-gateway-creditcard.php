@@ -108,7 +108,7 @@ class Emspay_Gateway_Creditcard extends Emspay_Gateway {
 		return array(
 			'M' => plugin_dir_url( EMSPAY_PLUGIN_FILE ) . 'assets/images/icons/mastercard.png',
 			'V' => plugin_dir_url( EMSPAY_PLUGIN_FILE ) . 'assets/images/icons/visa.png',
-			'C' => plugin_dir_url( EMSPAY_PLUGIN_FILE ) . 'assets/images/icons/diners.png',
+			'C' => plugin_dir_url( EMSPAY_PLUGIN_FILE ) . 'assets/images/icons/dinersclub.png',
 		);
 	}
 

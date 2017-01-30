@@ -22,6 +22,7 @@ class Emspay_Gateway_Bancontact extends Emspay_Gateway {
 		$this->has_fields         = false;
 		$this->method_title       = __( 'EMS Bancontact', 'emspay' );
 		$this->method_description = __( 'Bancontact description.', 'emspay' );
+		$this->icon               = plugin_dir_url( EMSPAY_PLUGIN_FILE ) . 'assets/images/icons/bancontact.png';
 	}
 
 

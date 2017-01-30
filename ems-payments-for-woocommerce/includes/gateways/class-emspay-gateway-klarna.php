@@ -52,6 +52,7 @@ class Emspay_Gateway_Klarna extends Emspay_Gateway {
 		$this->has_fields         = false;
 		$this->method_title       = __( 'EMS Klarna', 'emspay' );
 		$this->method_description = __( 'Klarna description.', 'emspay' );
+		$this->icon               = plugin_dir_url( EMSPAY_PLUGIN_FILE ) . 'assets/images/icons/klarna.png';
 	}
 
 
@@ -211,6 +212,9 @@ class Emspay_Gateway_Klarna extends Emspay_Gateway {
 		// correct the shipping price, include shipping tax, and exclude it from vattax
 		$args[ 'shipping' ] += $order->get_shipping_tax();
 		$args[ 'vattax' ]   -= $order->get_shipping_tax();
+
+		// remove phone number, because it override klarnaPhone field
+		unset( $args[ 'phone' ] );
 
 		return array_merge(
 			$args,

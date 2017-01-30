@@ -26,6 +26,7 @@ class Emspay_Gateway_Ideal extends Emspay_Gateway {
 		$this->has_fields         = false;
 		$this->method_title       = __( 'EMS iDEAL', 'emspay' );
 		$this->method_description = __( 'iDEAL description.', 'emspay' );
+		$this->icon               = plugin_dir_url( EMSPAY_PLUGIN_FILE ) . 'assets/images/icons/ideal.png';
 	}
 
 
@@ -108,15 +109,15 @@ class Emspay_Gateway_Ideal extends Emspay_Gateway {
 	public function get_issuer_banks() {
 		return array(
 			'ABNANL2A' => __( 'ABN AMRO', 'emspay' ),
+			'ASNBNL21' => __( 'ASN Bank', 'emspay' ),
+			'BUNQNL2A' => __( 'Bunq', 'emspay' ),
 			'INGBNL2A' => __( 'ING', 'emspay' ),
-			'SNSBNL2A' => __( 'SNS Bank', 'emspay' ),
-			'FVLBNL22' => __( 'van Lanschot', 'emspay' ),
-			'TRIONL2U' => __( 'Triodos Bank', 'emspay' ),
 			'KNABNL2H' => __( 'Knab', 'emspay' ),
 			'RABONL2U' => __( 'Rabobank', 'emspay' ),
 			'RBRBNL21' => __( 'RegioBank', 'emspay' ),
-			'ASNBNL21' => __( 'ASN Bank', 'emspay' ),
-			'BUNQNL2A' => __( 'Bunq', 'emspay' ),
+			'SNSBNL2A' => __( 'SNS Bank', 'emspay' ),
+			'TRIONL2U' => __( 'Triodos Bank', 'emspay' ),
+			'FVLBNL22' => __( 'van Lanschot', 'emspay' ),
 		);
 	}
 
