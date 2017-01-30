@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Ems Payments For WooCommerce 1.0.0\n"
-"POT-Creation-Date: 2017-01-25 12:05+0100\n"
+"POT-Creation-Date: 2017-01-30 18:01+0100\n"
 "PO-Revision-Date: 2017-01-10 00:56+0100\n"
 "Last-Translator: \n"
 "Language-Team: DLWT\n"
@@ -17,62 +17,62 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: ../languages\n"
 
-#: abstracts/abstract-emspay-gateway.php:128
+#: abstracts/abstract-emspay-gateway.php:122
+#, php-format
+msgid "Gateway does not supports selected checkout option: %s."
+msgstr ""
+
+#: abstracts/abstract-emspay-gateway.php:137
 msgid "Gateway Disabled"
 msgstr ""
 
-#: abstracts/abstract-emspay-gateway.php:128
-#, php-format
-msgid "Gateway does not support selected checkout option: %s."
-msgstr ""
-
-#: abstracts/abstract-emspay-gateway.php:173
+#: abstracts/abstract-emspay-gateway.php:190
 msgid "Enable/Disable"
 msgstr ""
 
-#: abstracts/abstract-emspay-gateway.php:179
+#: abstracts/abstract-emspay-gateway.php:196
 msgid "Title"
 msgstr ""
 
-#: abstracts/abstract-emspay-gateway.php:181
+#: abstracts/abstract-emspay-gateway.php:198
 msgid "This controls the title which the user sees during checkout."
 msgstr ""
 
-#: abstracts/abstract-emspay-gateway.php:186
+#: abstracts/abstract-emspay-gateway.php:203
 msgid "Description"
 msgstr ""
 
-#: abstracts/abstract-emspay-gateway.php:189
+#: abstracts/abstract-emspay-gateway.php:206
 msgid ""
 "This controls the description which the user sees during checkout."
 msgstr ""
 
-#: abstracts/abstract-emspay-gateway.php:193
+#: abstracts/abstract-emspay-gateway.php:210
 msgid "Debug Log"
 msgstr ""
 
-#: abstracts/abstract-emspay-gateway.php:195
+#: abstracts/abstract-emspay-gateway.php:212
 msgid "Enable logging"
 msgstr ""
 
-#: abstracts/abstract-emspay-gateway.php:197
+#: abstracts/abstract-emspay-gateway.php:214
 #, php-format
 msgid ""
 "Log EMS events, such as pay request, response, inside: <br><code>%s</"
 "code>"
 msgstr ""
 
-#: abstracts/abstract-emspay-gateway.php:283
+#: abstracts/abstract-emspay-gateway.php:314
 msgid ""
 "Thank you for your order, please click the button below to pay with "
 "your selected method."
 msgstr ""
 
-#: abstracts/abstract-emspay-gateway.php:300
+#: abstracts/abstract-emspay-gateway.php:331
 msgid "Payment"
 msgstr ""
 
-#: abstracts/abstract-emspay-gateway.php:399
+#: abstracts/abstract-emspay-gateway.php:440
 msgid "Invalid payment method."
 msgstr ""
 
@@ -96,117 +96,125 @@ msgstr ""
 msgid "EMS payment pending: %s"
 msgstr ""
 
-#: class-emspay-integration.php:56
+#: class-emspay-integration.php:62
 msgid "EMS e-Commerce Gateway"
 msgstr ""
 
-#: class-emspay-integration.php:85 class-emspay-integration.php:199
+#: class-emspay-integration.php:92 class-emspay-integration.php:211
 msgid "Store Name"
 msgstr ""
 
-#: class-emspay-integration.php:87
+#: class-emspay-integration.php:94
 msgid "This is the ID of the store provided by EMS."
 msgstr ""
 
-#: class-emspay-integration.php:92 class-emspay-integration.php:213
+#: class-emspay-integration.php:99 class-emspay-integration.php:225
 msgid "Shared Secret"
 msgstr ""
 
-#: class-emspay-integration.php:94
+#: class-emspay-integration.php:101
 msgid "This is the shared secret provided to you by EMS."
 msgstr ""
 
-#: class-emspay-integration.php:99
+#: class-emspay-integration.php:106
 msgid "Checkout option"
 msgstr ""
 
-#: class-emspay-integration.php:102
+#: class-emspay-integration.php:109
 msgid "This field allows you to set the checkout option."
 msgstr ""
 
-#: class-emspay-integration.php:107
+#: class-emspay-integration.php:114
 msgid "classic"
 msgstr ""
 
-#: class-emspay-integration.php:111
+#: class-emspay-integration.php:118
 msgid "combinedpage"
 msgstr ""
 
-#: class-emspay-integration.php:115
+#: class-emspay-integration.php:122
 msgid "Pay mode"
 msgstr ""
 
-#: class-emspay-integration.php:118
+#: class-emspay-integration.php:125
 msgid "This field allows you to chosen mode for the transaction."
 msgstr ""
 
-#: class-emspay-integration.php:124
+#: class-emspay-integration.php:131
 msgid "payonly"
 msgstr ""
 
-#: class-emspay-integration.php:126
+#: class-emspay-integration.php:133
 msgid "payplus"
 msgstr ""
 
-#: class-emspay-integration.php:128
+#: class-emspay-integration.php:135
 msgid "fullpay"
 msgstr ""
 
-#: class-emspay-integration.php:132
+#: class-emspay-integration.php:139
 msgid "Environment"
 msgstr ""
 
-#: class-emspay-integration.php:135
+#: class-emspay-integration.php:142
 msgid ""
 "This setting specifies whether you will process live transactions, or "
 "whether you will process simulated transactions."
 msgstr ""
 
-#: class-emspay-integration.php:139
+#: class-emspay-integration.php:146
 msgid "Integration"
 msgstr ""
 
-#: class-emspay-integration.php:140
+#: class-emspay-integration.php:147
 msgid "Production"
 msgstr ""
 
-#: class-emspay-integration.php:154
+#: class-emspay-integration.php:151
+msgid "Show gateway's icon"
+msgstr ""
+
+#: class-emspay-integration.php:153
+msgid "Show icons"
+msgstr ""
+
+#: class-emspay-integration.php:167
 msgid "Are you already a customer ?"
 msgstr ""
 
-#: class-emspay-integration.php:156
+#: class-emspay-integration.php:169
 msgid ""
 "If you are already registered as an EMS merchant then please enter "
 "the credentials and settings below."
 msgstr ""
 
-#: class-emspay-integration.php:158
+#: class-emspay-integration.php:171
 msgid ""
 "For new customers please follow the link below to acquire an EMS "
 "merchant account."
 msgstr ""
 
-#: class-emspay-integration.php:161
+#: class-emspay-integration.php:174
 msgid "Becoming an EMS customer"
 msgstr ""
 
-#: class-emspay-integration.php:163
+#: class-emspay-integration.php:176
 msgid "Get a merchant account via this link:"
 msgstr ""
 
-#: class-emspay-integration.php:167
+#: class-emspay-integration.php:180
 msgid "Contact EMS Support"
 msgstr ""
 
-#: class-emspay-integration.php:169
+#: class-emspay-integration.php:182
 msgid "Visit the FAQ:"
 msgstr ""
 
-#: class-emspay-integration.php:173
+#: class-emspay-integration.php:186
 msgid "Contact information:"
 msgstr ""
 
-#: class-emspay-integration.php:230
+#: class-emspay-integration.php:242
 #, php-format
 msgid "Error: You must enter %s."
 msgstr ""
@@ -219,15 +227,15 @@ msgstr ""
 msgid "Bancontact description."
 msgstr ""
 
-#: gateways/class-emspay-gateway-bancontact.php:29
+#: gateways/class-emspay-gateway-bancontact.php:30
 msgid "Enable Bancontact"
 msgstr ""
 
-#: gateways/class-emspay-gateway-bancontact.php:34
+#: gateways/class-emspay-gateway-bancontact.php:35
 msgid "Bancontact"
 msgstr ""
 
-#: gateways/class-emspay-gateway-bancontact.php:39
+#: gateways/class-emspay-gateway-bancontact.php:40
 msgid "Paying online with Bancontact."
 msgstr ""
 
@@ -297,53 +305,49 @@ msgstr ""
 msgid "iDEAL description."
 msgstr ""
 
-#: gateways/class-emspay-gateway-ideal.php:40
+#: gateways/class-emspay-gateway-ideal.php:41
 msgid "Enable iDEAL"
 msgstr ""
 
-#: gateways/class-emspay-gateway-ideal.php:45
+#: gateways/class-emspay-gateway-ideal.php:46
 msgid "iDEAL"
 msgstr ""
 
-#: gateways/class-emspay-gateway-ideal.php:52
+#: gateways/class-emspay-gateway-ideal.php:53
 msgid "Show issuer bank select"
 msgstr ""
 
-#: gateways/class-emspay-gateway-ideal.php:54
+#: gateways/class-emspay-gateway-ideal.php:55
 msgid "Let your customers select the issuer bank"
 msgstr ""
 
-#: gateways/class-emspay-gateway-ideal.php:62
+#: gateways/class-emspay-gateway-ideal.php:63
 msgid "Paying online with iDEAL."
 msgstr ""
 
-#: gateways/class-emspay-gateway-ideal.php:69
-#: gateways/class-emspay-gateway-ideal.php:98
+#: gateways/class-emspay-gateway-ideal.php:70
+#: gateways/class-emspay-gateway-ideal.php:99
 msgid "Choose your bank"
 msgstr ""
 
-#: gateways/class-emspay-gateway-ideal.php:75
+#: gateways/class-emspay-gateway-ideal.php:76
 msgid "Invalid bank"
 msgstr ""
 
-#: gateways/class-emspay-gateway-ideal.php:110
+#: gateways/class-emspay-gateway-ideal.php:111
 msgid "ABN AMRO"
 msgstr ""
 
-#: gateways/class-emspay-gateway-ideal.php:111
-msgid "ING"
-msgstr ""
-
 #: gateways/class-emspay-gateway-ideal.php:112
-msgid "SNS Bank"
+msgid "ASN Bank"
 msgstr ""
 
 #: gateways/class-emspay-gateway-ideal.php:113
-msgid "van Lanschot"
+msgid "Bunq"
 msgstr ""
 
 #: gateways/class-emspay-gateway-ideal.php:114
-msgid "Triodos Bank"
+msgid "ING"
 msgstr ""
 
 #: gateways/class-emspay-gateway-ideal.php:115
@@ -359,31 +363,48 @@ msgid "RegioBank"
 msgstr ""
 
 #: gateways/class-emspay-gateway-ideal.php:118
-msgid "ASN Bank"
+msgid "SNS Bank"
 msgstr ""
 
 #: gateways/class-emspay-gateway-ideal.php:119
-msgid "Bunq"
+msgid "Triodos Bank"
 msgstr ""
 
-#: gateways/class-emspay-gateway-klarna.php:27
+#: gateways/class-emspay-gateway-ideal.php:120
+msgid "van Lanschot"
+msgstr ""
+
+#: gateways/class-emspay-gateway-klarna.php:53
 msgid "EMS Klarna"
 msgstr ""
 
-#: gateways/class-emspay-gateway-klarna.php:28
+#: gateways/class-emspay-gateway-klarna.php:54
 msgid "Klarna description."
 msgstr ""
 
-#: gateways/class-emspay-gateway-klarna.php:33
+#: gateways/class-emspay-gateway-klarna.php:60
 msgid "Enable Klarna"
 msgstr ""
 
-#: gateways/class-emspay-gateway-klarna.php:38
+#: gateways/class-emspay-gateway-klarna.php:65
 msgid "Klarna"
 msgstr ""
 
-#: gateways/class-emspay-gateway-klarna.php:43
+#: gateways/class-emspay-gateway-klarna.php:70
 msgid "Paying online with Klarna."
+msgstr ""
+
+#: gateways/class-emspay-gateway-klarna.php:118
+#, php-format
+msgid "Gateway does not supports selected currency: %s."
+msgstr ""
+
+#: gateways/class-emspay-gateway-klarna.php:128
+msgid "Klarna is not available in your country."
+msgstr ""
+
+#: gateways/class-emspay-gateway-klarna.php:133
+msgid "The currency does not correspond to the country's currency."
 msgstr ""
 
 #: gateways/class-emspay-gateway-maestro.php:22
@@ -394,29 +415,29 @@ msgstr ""
 msgid "Maestro description."
 msgstr ""
 
-#: gateways/class-emspay-gateway-maestro.php:28
+#: gateways/class-emspay-gateway-maestro.php:29
 msgid "Enable Maestro"
 msgstr ""
 
-#: gateways/class-emspay-gateway-maestro.php:33
-#: gateways/class-emspay-gateway-maestro.php:77
+#: gateways/class-emspay-gateway-maestro.php:34
+#: gateways/class-emspay-gateway-maestro.php:78
 msgid "Maestro"
 msgstr ""
 
-#: gateways/class-emspay-gateway-maestro.php:38
+#: gateways/class-emspay-gateway-maestro.php:39
 msgid "Paying online with Maestro."
 msgstr ""
 
-#: gateways/class-emspay-gateway-maestro.php:43
-#: gateways/class-emspay-gateway-maestro.php:65
+#: gateways/class-emspay-gateway-maestro.php:44
+#: gateways/class-emspay-gateway-maestro.php:66
 msgid "Choose Debit Card"
 msgstr ""
 
-#: gateways/class-emspay-gateway-maestro.php:49
+#: gateways/class-emspay-gateway-maestro.php:50
 msgid "Invalid Debit Card"
 msgstr ""
 
-#: gateways/class-emspay-gateway-maestro.php:78
+#: gateways/class-emspay-gateway-maestro.php:79
 msgid "Maestro UK"
 msgstr ""
 
@@ -428,15 +449,15 @@ msgstr ""
 msgid "Masterpass description."
 msgstr ""
 
-#: gateways/class-emspay-gateway-masterpass.php:29
+#: gateways/class-emspay-gateway-masterpass.php:30
 msgid "Enable Masterpass"
 msgstr ""
 
-#: gateways/class-emspay-gateway-masterpass.php:34
+#: gateways/class-emspay-gateway-masterpass.php:35
 msgid "Masterpass"
 msgstr ""
 
-#: gateways/class-emspay-gateway-masterpass.php:39
+#: gateways/class-emspay-gateway-masterpass.php:40
 msgid "Paying online with Masterpass."
 msgstr ""
 
@@ -448,15 +469,15 @@ msgstr ""
 msgid "Paypal description."
 msgstr ""
 
-#: gateways/class-emspay-gateway-paypal.php:29
+#: gateways/class-emspay-gateway-paypal.php:30
 msgid "Enable Paypal"
 msgstr ""
 
-#: gateways/class-emspay-gateway-paypal.php:34
+#: gateways/class-emspay-gateway-paypal.php:35
 msgid "Paypal"
 msgstr ""
 
-#: gateways/class-emspay-gateway-paypal.php:39
+#: gateways/class-emspay-gateway-paypal.php:40
 msgid "Paying online with Paypal."
 msgstr ""
 
@@ -468,14 +489,14 @@ msgstr ""
 msgid "Sofort description."
 msgstr ""
 
-#: gateways/class-emspay-gateway-sofort.php:29
+#: gateways/class-emspay-gateway-sofort.php:30
 msgid "Enable Sofort"
 msgstr ""
 
-#: gateways/class-emspay-gateway-sofort.php:34
+#: gateways/class-emspay-gateway-sofort.php:35
 msgid "Sofort"
 msgstr ""
 
-#: gateways/class-emspay-gateway-sofort.php:39
+#: gateways/class-emspay-gateway-sofort.php:40
 msgid "Paying online with Sofort."
 msgstr ""
