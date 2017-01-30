@@ -137,6 +137,11 @@ class Emspay_Gateway_Klarna extends Emspay_Gateway {
 	}
 
 
+	protected function include_billing_args() {
+		return true;
+	}
+
+
 	// id;description;quantity;item_total_price;sub_total;vat_tax;shipping
 	public function get_line_item_args( $order ) {
 		$args = array();

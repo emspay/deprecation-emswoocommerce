@@ -344,9 +344,14 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 	}
 
 
+	protected function include_billing_args() {
+		return in_array( $this->integration->mode, array( 'payplus', 'fullpay' ) );
+	}
+
+
 	protected function get_billing_args( $order ) {
 		$billing_args = array();
-		if ( in_array( $this->integration->mode, array( 'payplus', 'fullpay' ) ) ) {
+		if ( $this->include_billing_args() ) {
 			$billing_args['bname']    = $order->get_formatted_billing_full_name();
 			$billing_args['bcompany'] = $order->billing_company;
 			$billing_args['baddr1']   = $order->billing_address_1;
@@ -362,9 +367,14 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 		return $billing_args;
 	}
 
+
+	protected function include_shipping_args() {
+		return $this->integration->mode == 'fullpay';
+	}
+
 	protected function get_shipping_args( $order ) {
 		$shipping_args = array();
-		if ( $this->integration->mode == 'fullpay' ) {
+		if ( $this->include_shipping_args() ) {
 			$shipping_args['sname']    = $order->get_formatted_shipping_full_name();
 			$shipping_args['saddr1']   = $order->shipping_address_1;
 			$shipping_args['saddr2']   = $order->shipping_address_2;
