@@ -163,7 +163,7 @@ class Emspay_Gateway_Klarna extends Emspay_Gateway {
 	public function hosted_payment_args( $args, $order ) {
 		// correct the shipping price, include shipping tax, and exclude it from vattax
 		$args[ 'shipping' ] += $order->get_shipping_tax();
-		$args[ 'vattax' ]   -= $order->get_shipping_tax()
+		$args[ 'vattax' ]   -= $order->get_shipping_tax();
 
 		return array_merge(
 			$args,
