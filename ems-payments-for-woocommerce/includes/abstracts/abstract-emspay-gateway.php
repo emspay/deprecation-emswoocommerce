@@ -217,6 +217,20 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 	}
 
 
+	/**
+	* Return the gateway's icon.
+	*
+	* @return string
+	*/
+	public function get_icon() {
+		if ( ! $this->integration->show_icon ) {
+			return apply_filters( 'woocommerce_gateway_icon', '', $this->id );
+		}
+
+		return parent::get_icon();
+	}
+
+
 	public function get_extra_form_fields() {
 		return array();
 	}

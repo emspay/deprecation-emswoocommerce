@@ -45,6 +45,12 @@ class Emspay_Integration extends WC_Integration {
 	public $environment;
 
 	/**
+	 * Show gateways icons.
+	 * @var boolean
+	 */
+	public $show_icon;
+
+	/**
 	 * Init and hook in the integration.
 	 *
 	 * @since  1.0.0
@@ -65,6 +71,7 @@ class Emspay_Integration extends WC_Integration {
 		$this->checkoutoption = $this->get_option( 'checkoutoption', 'classic' );
 		$this->mode           = $this->get_option( 'mode', 'payonly' );
 		$this->environment    = $this->get_option( 'environment', 'integration' );
+		$this->show_icon      = 'yes' === $this->get_option( 'show_icon', 'yes' );
 
 		// Actions.
 		add_action( 'woocommerce_update_options_integration_' . $this->id, array( $this, 'process_admin_options' ) );
@@ -139,6 +146,12 @@ class Emspay_Integration extends WC_Integration {
 					'integration'  => __( 'Integration', 'emspay' ),
 					'production'   => __( 'Production', 'emspay' ),
 				)
+			),
+			'show_icon' => array(
+				'title'   => __( 'Show gateway\'s icon', 'emspay' ),
+				'type'    => 'checkbox',
+				'label'   => __( 'Show icons', 'emspay' ),
+				'default' => 'yes'
 			),
 		);
 	}

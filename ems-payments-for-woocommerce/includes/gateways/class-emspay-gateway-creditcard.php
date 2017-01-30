@@ -127,6 +127,10 @@ class Emspay_Gateway_Creditcard extends Emspay_Gateway {
 	 * @return string
 	 */
 	public function get_icon() {
+		if ( ! $this->integration->show_icon ) {
+			return apply_filters( 'woocommerce_gateway_icon', '', $this->id );
+		}
+
 		$cc_brands = $this->get_supported_cc_brands();
 		$icons = $this->get_cc_brands_icon();
 		$icon_html = '';
