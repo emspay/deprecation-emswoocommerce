@@ -160,6 +160,48 @@ class Emspay_Gateway_Klarna extends Emspay_Gateway {
 	}
 
 
+	public function get_klarna_phone( $order ) {
+		return array(
+			'klarnaPhone' => trim(
+				preg_replace( '/[^\s0-9\-]/', '', str_replace( '+', '00', $order->billing_phone ) )
+			)
+		);
+	}
+
+
+	public function get_klarna_address( $order ) {
+		$address = $order->billing_address_1;
+		$street = $address;
+		$house_number = '';
+		$extension = $order->billing_address_2;
+
+		if ( preg_match( '/^[^0-9]*/', $address, $match ) ) {
+			$address = str_replace( $match[0], '', $address );
+			$street  = trim( $match[0] );
+
+			if ( strlen( $address ) != 0 ) {
+				$addrArray = explode( ' ', $address );
+				$house_number = array_shift( $addrArray );
+
+				if ( count( $addrArray ) != 0 ) {
+					// If there is an extension already include it
+					if ( ! empty( $extension ) ) {
+						array_push( $addrArray, $extension );
+					}
+
+					$extension = implode( ' ', $addrArray );
+				}
+			}
+		}
+
+		return array(
+			'klarnaStreetName'           => $street,
+			'klarnaHouseNumber'          => $house_number,
+			'klarnaHouseNumberExtension' => $extension,
+		);
+	}
+
+
 	public function hosted_payment_args( $args, $order ) {
 		// correct the shipping price, include shipping tax, and exclude it from vattax
 		$args[ 'shipping' ] += $order->get_shipping_tax();
@@ -169,8 +211,10 @@ class Emspay_Gateway_Klarna extends Emspay_Gateway {
 			$args,
 			array(
 				'klarnaFirstname' => $order->billing_first_name,
-				'klarnaLastname'  => $order->billing_last_name
+				'klarnaLastname'  => $order->billing_last_name,
 			),
+			$this->get_klarna_phone( $order ),
+			$this->get_klarna_address( $order ),
 			$this->get_line_item_args( $order )
 		);
 	}
