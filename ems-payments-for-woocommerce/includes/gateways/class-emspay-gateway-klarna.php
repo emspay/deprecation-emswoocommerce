@@ -154,8 +154,8 @@ class Emspay_Gateway_Klarna extends Emspay_Gateway {
 				$item[ 'name' ], // description
 				$item[ 'qty' ], // quantity
 				$order->get_line_total( $item, true ), // item_total_price
-				$item[ 'line_subtotal' ], // sub_total
-				$item[ 'line_tax' ], // vat_tax
+				$order->get_line_subtotal( $item ), // sub_total
+				$order->get_line_tax( $item ), // vat_tax
 				0 // shipping (added as total shipping)
 			);
 
@@ -210,8 +210,8 @@ class Emspay_Gateway_Klarna extends Emspay_Gateway {
 
 	public function hosted_payment_args( $args, $order ) {
 		// correct the shipping price, include shipping tax, and exclude it from vattax
-		$args[ 'shipping' ] += $order->get_shipping_tax();
-		$args[ 'vattax' ]   -= $order->get_shipping_tax();
+		$args[ 'shipping' ] = round( $args[ 'shipping' ] + $order->get_shipping_tax(), wc_get_price_decimals() );
+		$args[ 'vattax' ]   = round( $args[ 'vattax' ] - $order->get_shipping_tax(), wc_get_price_decimals() );
 
 		// remove phone number, because it override klarnaPhone field
 		unset( $args[ 'phone' ] );
