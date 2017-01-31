@@ -197,8 +197,20 @@ final class Emspay_Gateway_Plugin {
 	 * @since  1.0.0
 	 * @return void
 	 */
-	private function load_plugin_textdomain() {
+	protected static function load_plugin_textdomain() {
 		load_plugin_textdomain( 'emspay', false, plugin_basename( dirname( __FILE__ ) ) . '/languages' );
+	}
+
+
+	public static function activate_plugin() {
+		if ( ! in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
+			// Deactivate the plugin
+			deactivate_plugins( __FILE__ );
+
+			self::load_plugin_textdomain();
+
+			die( __( 'EMS payments for WooCommerce requires WooCommerce plugin to be active!', 'emspay' ) );
+		}
 	}
 
 
@@ -251,10 +263,7 @@ final class Emspay_Gateway_Plugin {
 	public function show_settings_warning() {
 		$integration = $this->get_integration();
 
-		$storename    = $integration->get_option( 'storename' );
-		$sharedsecret = $integration->get_option( 'sharedsecret' );
-
-		if ( empty( $storename ) || empty( $sharedsecret ) ) {
+		if ( ! $integration->is_connected() ) {
 			$url = $this->get_settings_url();
 			?>
 			<div class="notice notice-warning">
@@ -289,6 +298,8 @@ final class Emspay_Gateway_Plugin {
 	}
 
 }
+
+register_activation_hook( __FILE__, array( 'Emspay_Gateway_Plugin', 'activate_plugin' ) );
 
 /**
  * Return instance of Emspay_Gateway_Plugin.

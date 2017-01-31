@@ -118,6 +118,11 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 
 
 	public function is_valid_for_use() {
+		if ( ! $this->integration->is_connected() ) {
+			$this->disabled_error = __( 'EMS e-Commerce Gateway is not configured.', 'emspay' );
+			return false;
+		}
+
 		if ( ! $this->is_checkout_option_supported() ) {
 			$this->disabled_error = sprintf( __( 'Gateway does not supports selected checkout option: %s.', 'emspay' ), $this->integration->checkoutoption );
 			return false;
@@ -158,25 +163,8 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 
 
 	protected function init_gateway() {
-		$this->core_options = new EmsCore\Options();
+		$this->core_options = $this->integration->get_core_options();
 		$this->core_order = new EmsCore\Order();
-
-		$this->set_core_options();
-	}
-
-
-	protected function set_core_options() {
-		$url = WC()->api_request_url( 'Emspay_Gateway' );
-
-		$this->core_options
-			->setStoreName($this->integration->storename)
-			->setSharedSecret($this->integration->sharedsecret)
-			->setEnvironment($this->integration->environment)
-			->setCheckoutOption($this->integration->checkoutoption)
-			->setPayMode($this->integration->mode)
-			->setFailUrl($url)
-			->setSuccessUrl($url)
-			->setIpnUrl($url);
 	}
 
 

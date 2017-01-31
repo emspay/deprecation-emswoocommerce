@@ -66,12 +66,12 @@ class Emspay_Integration extends WC_Integration {
 		$this->init_settings();
 
 		// Define user set variables.
-		$this->storename      = $this->get_option( 'storename' );
-		$this->sharedsecret   = $this->get_option( 'sharedsecret' );
 		$this->checkoutoption = $this->get_option( 'checkoutoption', 'classic' );
 		$this->mode           = $this->get_option( 'mode', 'payonly' );
-		$this->environment    = $this->get_option( 'environment', 'integration' );
 		$this->show_icon      = 'yes' === $this->get_option( 'show_icon', 'yes' );
+		$this->environment    = $this->get_option( 'environment', 'integration' );
+		$this->storename      = $this->get_option( $this->environment . '_storename' );
+		$this->sharedsecret   = $this->get_option( $this->environment . '_sharedsecret' );
 
 		// Actions.
 		add_action( 'woocommerce_update_options_integration_' . $this->id, array( $this, 'process_admin_options' ) );
@@ -88,15 +88,41 @@ class Emspay_Integration extends WC_Integration {
 	 */
 	public function init_form_fields() {
 		$this->form_fields = array(
-			'storename' => array(
-				'title'             => __( 'Store Name', 'emspay' ),
+			'environment' => array(
+				'title'             => __( 'Environment', 'emspay' ),
+				'type'              => 'select',
+				'class'             => 'wc-enhanced-select',
+				'description'       => __( 'This setting specifies whether you will process live transactions, or whether you will process simulated transactions.', 'emspay' ),
+				'desc_tip'          => true,
+				'default'           => 'integration',
+				'options'           => array(
+					'integration'  => __( 'Integration', 'emspay' ),
+					'production'   => __( 'Production', 'emspay' ),
+				)
+			),
+			'integration_storename' => array(
+				'title'             => __( 'Store Name (integration)', 'emspay' ),
 				'type'              => 'text',
 				'description'       => __( 'This is the ID of the store provided by EMS.', 'emspay' ),
 				'desc_tip'          => true,
 				'default'           => '',
 			),
-			'sharedsecret' => array(
-				'title'             => __( 'Shared Secret', 'emspay' ),
+			'integration_sharedsecret' => array(
+				'title'             => __( 'Shared Secret (integration)', 'emspay' ),
+				'type'              => 'text',
+				'description'       => __( 'This is the shared secret provided to you by EMS.', 'emspay' ),
+				'desc_tip'          => true,
+				'default'           => '',
+			),
+			'production_storename' => array(
+				'title'             => __( 'Store Name (production)', 'emspay' ),
+				'type'              => 'text',
+				'description'       => __( 'This is the ID of the store provided by EMS.', 'emspay' ),
+				'desc_tip'          => true,
+				'default'           => '',
+			),
+			'production_sharedsecret' => array(
+				'title'             => __( 'Shared Secret (production)', 'emspay' ),
 				'type'              => 'text',
 				'description'       => __( 'This is the shared secret provided to you by EMS.', 'emspay' ),
 				'desc_tip'          => true,
@@ -133,18 +159,6 @@ class Emspay_Integration extends WC_Integration {
 					'payplus'  => __( 'payplus', 'emspay' ),
 					// in addition to the above, the payment gateway displays a third page to also collect shipping information
 					'fullpay'  => __( 'fullpay', 'emspay' ),
-				)
-			),
-			'environment' => array(
-				'title'             => __( 'Environment', 'emspay' ),
-				'type'              => 'select',
-				'class'             => 'wc-enhanced-select',
-				'description'       => __( 'This setting specifies whether you will process live transactions, or whether you will process simulated transactions.', 'emspay' ),
-				'desc_tip'          => true,
-				'default'           => 'integration',
-				'options'           => array(
-					'integration'  => __( 'Integration', 'emspay' ),
-					'production'   => __( 'Production', 'emspay' ),
 				)
 			),
 			'show_icon' => array(
@@ -207,8 +221,13 @@ class Emspay_Integration extends WC_Integration {
 	 * @param  string $value
 	 * @return string
 	 */
-	public function validate_storename_field( $key, $value ) {
-		return $this->validate_required_field( $key, $value, __( 'Store Name', 'emspay' ) );
+	public function validate_integration_storename_field( $key, $value ) {
+		return $this->validate_required_field( $key, $value, 'integration', __( 'Store Name (integration)', 'emspay' ) );
+	}
+
+
+	public function validate_production_storename_field( $key, $value ) {
+		return $this->validate_required_field( $key, $value, 'production', __( 'Store Name (production)', 'emspay' ) );
 	}
 
 
@@ -221,9 +240,15 @@ class Emspay_Integration extends WC_Integration {
 	 * @param  string $value
 	 * @return string
 	 */
-	public function validate_sharedsecret_field( $key, $value ) {
-		return $this->validate_required_field( $key, $value, __( 'Shared Secret', 'emspay' ) );
+	public function validate_integration_sharedsecret_field( $key, $value ) {
+		return $this->validate_required_field( $key, $value, 'integration', __( 'Shared Secret (integration)', 'emspay' ) );
 	}
+
+
+	public function validate_production_sharedsecret_field( $key, $value ) {
+		return $this->validate_required_field( $key, $value, 'production', __( 'Shared Secret (production)', 'emspay' ) );
+	}
+
 
 	/**
 	 * Validate a required field.
@@ -235,7 +260,11 @@ class Emspay_Integration extends WC_Integration {
 	 * @param  string $title
 	 * @return string
 	 */
-	public function validate_required_field( $key, $value, $title ) {
+	public function validate_required_field( $key, $value, $environment, $title ) {
+		if ( $this->environment != $environment ) {
+			return $value;
+		}
+
 		$value = $this->validate_text_field( $key, $value );
 
 		if ( empty( $value ) ) {
@@ -244,5 +273,49 @@ class Emspay_Integration extends WC_Integration {
 
 		return $value;
 	}
+
+	public function get_core_options() {
+		$core_options = new EmsCore\Options();
+		$url = WC()->api_request_url( 'Emspay_Gateway' );
+
+		$core_options
+			->setStoreName($this->storename)
+			->setSharedSecret($this->sharedsecret)
+			->setEnvironment($this->environment)
+			->setCheckoutOption($this->checkoutoption)
+			->setPayMode($this->mode)
+			->setFailUrl($url)
+			->setSuccessUrl($url)
+			->setIpnUrl($url);
+
+		return $core_options;
+	}
+
+	public function is_connected() {
+		return ( ! empty( $this->storename ) && ! empty( $this->sharedsecret ) );
+	}
+
+
+	public function process_admin_options() {
+		parent::process_admin_options();
+
+		// Validate credentials
+		$this->validate_credentials();
+	}
+
+	protected function validate_credentials() {
+		if ( ! $this->is_connected() ) {
+			return false;
+		}
+
+
+		if( ! EmsCore\Request::checkCredentials( $this->get_core_options() ) ) {
+			WC_Admin_Settings::add_error( sprintf( __( 'Error: The %s credentials you provided are not valid.  Please double-check that you entered them correctly and try again.', 'emspay' ), $this->environment ) );
+			return false;
+		}
+
+		return true;
+	}
+
 
 }
