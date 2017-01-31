@@ -69,13 +69,19 @@ class Emspay_Integration extends WC_Integration {
 		$this->checkoutoption = $this->get_option( 'checkoutoption', 'classic' );
 		$this->mode           = $this->get_option( 'mode', 'payonly' );
 		$this->show_icon      = 'yes' === $this->get_option( 'show_icon', 'yes' );
-		$this->environment    = $this->get_option( 'environment', 'integration' );
-		$this->storename      = $this->get_option( $this->environment . '_storename' );
-		$this->sharedsecret   = $this->get_option( $this->environment . '_sharedsecret' );
+
+		$this->init_environment();
 
 		// Actions.
 		add_action( 'woocommerce_update_options_integration_' . $this->id, array( $this, 'process_admin_options' ) );
 
+	}
+
+
+	protected function init_environment() {
+		$this->environment    = $this->get_option( 'environment', 'integration' );
+		$this->storename      = $this->get_option( $this->environment . '_storename' );
+		$this->sharedsecret   = $this->get_option( $this->environment . '_sharedsecret' );
 	}
 
 
@@ -292,6 +298,8 @@ class Emspay_Integration extends WC_Integration {
 	}
 
 	public function is_connected() {
+		$this->init_environment();
+
 		return ( ! empty( $this->storename ) && ! empty( $this->sharedsecret ) );
 	}
 
