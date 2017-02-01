@@ -267,7 +267,7 @@ class Emspay_Integration extends WC_Integration {
 	 * @return string
 	 */
 	public function validate_required_field( $key, $value, $environment, $title ) {
-		if ( $this->environment != $environment ) {
+		if ( $this->get_option( 'environment' ) != $environment ) {
 			return $value;
 		}
 

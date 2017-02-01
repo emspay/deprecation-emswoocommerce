@@ -261,17 +261,19 @@ final class Emspay_Gateway_Plugin {
 	 * @return void
 	 */
 	public function show_settings_warning() {
-		$integration = $this->get_integration();
+		if ( ( empty( $_GET['page'] ) || empty( $_GET['tab'] ) || 'wc-settings' !== $_GET['page'] || 'integration' !== $_GET['tab'] ) ) {
+			$integration = $this->get_integration();
 
-		if ( ! $integration->is_connected() ) {
-			$url = $this->get_settings_url();
-			?>
-			<div class="notice notice-warning">
-				<p>
-					<?php echo sprintf( __( '%sEMS e-Commerce Gateway is almost ready. To get started, %sconnect your EMS account%s.%s', 'emspay' ), '<strong>', '<a href="' . esc_url( $url ) . '">', '</a>', '</strong>' ); ?>
-				</p>
-			</div>
-			<?php
+			if ( ! $integration->is_connected() ) {
+				$url = $this->get_settings_url();
+				?>
+				<div class="notice notice-warning">
+					<p>
+						<?php echo sprintf( __( '%sEMS e-Commerce Gateway is almost ready. To get started, %sconnect your EMS account%s.%s', 'emspay' ), '<strong>', '<a href="' . esc_url( $url ) . '">', '</a>', '</strong>' ); ?>
+					</p>
+				</div>
+				<?php
+			}
 		}
 	}
 
