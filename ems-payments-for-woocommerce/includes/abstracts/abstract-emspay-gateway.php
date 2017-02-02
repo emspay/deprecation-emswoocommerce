@@ -323,6 +323,15 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 	}
 
 
+	protected function get_order_subtotal( $order ) {
+		if ( $order->get_total_discount() > 0 ) {
+			return round( $order->get_subtotal() - $order->get_total_discount(), wc_get_price_decimals() );
+		}
+
+		return $order->get_subtotal();
+	}
+
+
 	protected function get_hosted_payment_args( $order ) {
 		$args = apply_filters( 'woocommerce_emspay_' . $this->id . '_hosted_args', array_merge(
 			array(
@@ -330,7 +339,7 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 				'chargetotal'     => $order->get_total(),
 				'shipping'        => $order->get_total_shipping(),
 				'vattax'          => $order->get_total_tax(),
-				'subtotal'        => $order->get_subtotal(),
+				'subtotal'        => $this->get_order_subtotal( $order ),
 				'orderId'         => $order->id,
 				'language'        => $this->get_emspay_language(),
 				'paymentMethod'   => $order->ems_payment_method,

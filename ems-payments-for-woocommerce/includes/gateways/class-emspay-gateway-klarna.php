@@ -142,6 +142,12 @@ class Emspay_Gateway_Klarna extends Emspay_Gateway {
 		return true;
 	}
 
+	protected function get_item_subtotal_tax( $item, $round = true ) {
+		$price = $item['line_subtotal_tax'] / max( 1, $item['qty'] );
+		$price = $round ? wc_round_tax_total( $price ) : $price;
+
+		return $price;
+	}
 
 	// id;description;quantity;item_total_price;sub_total;vat_tax;shipping
 	public function get_line_item_args( $order ) {
@@ -153,13 +159,27 @@ class Emspay_Gateway_Klarna extends Emspay_Gateway {
 				$item[ 'product_id' ], // id
 				$item[ 'name' ], // description
 				$item[ 'qty' ], // quantity
-				$order->get_line_total( $item, true ), // item_total_price
-				$order->get_line_subtotal( $item ), // sub_total
-				$order->get_line_tax( $item ), // vat_tax
+				$order->get_item_subtotal( $item, true ), // item_total_price (inc tax)
+				$order->get_item_subtotal( $item ), // sub_total (exc tax)
+				$this->get_item_subtotal_tax( $item ), // vat_tax
 				0 // shipping (added as total shipping)
 			);
 
 			$args[ 'item' . $i++ ] = implode( ';', $line_item );
+		}
+
+		if ( $order->get_total_discount() > 0 ) {
+			$line_item = array(
+				0, // id
+				__( 'Discount', 'emspay' ), // description
+				1, // quantity
+				- $order->get_total_discount(), // item_total_price
+				0, // sub_total
+				0, // vat_tax
+				0 // shipping (added as total shipping)
+			);
+
+			$args[ 'item' . $i ] = implode( ';', $line_item );
 		}
 
 		return $args;
