@@ -174,7 +174,7 @@ class Emspay_Gateway_Klarna extends Emspay_Gateway {
 				__( 'Discount', 'emspay' ), // description
 				1, // quantity
 				- $order->get_total_discount(), // item_total_price
-				0, // sub_total
+				- $order->get_total_discount(), // sub_total
 				0, // vat_tax
 				0 // shipping (added as total shipping)
 			);
