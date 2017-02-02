@@ -59,16 +59,7 @@ class Emspay_Gateway_Response {
 	}
 
 	protected static function get_core_option() {
-		$integration = emspay_gateway()->get_integration();
-
-		$core_option = new EmsCore\Options();
-		$core_option->setStoreName($integration->storename);
-		$core_option->setSharedSecret($integration->sharedsecret);
-		$core_option->setEnvironment($integration->environment);
-		$core_option->setCheckoutOption($integration->checkoutoption);
-		$core_option->setPayMode($integration->mode);
-
-		return $core_option;
+		return emspay_gateway()->get_integration()->get_core_options();
 	}
 
 

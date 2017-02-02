@@ -281,6 +281,8 @@ class Emspay_Integration extends WC_Integration {
 	}
 
 	public function get_core_options() {
+		$this->init_environment();
+
 		$core_options = new EmsCore\Options();
 		$url = WC()->api_request_url( 'Emspay_Gateway' );
 
