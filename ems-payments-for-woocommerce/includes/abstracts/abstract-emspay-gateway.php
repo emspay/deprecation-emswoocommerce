@@ -123,12 +123,26 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 			return false;
 		}
 
+		$woocommerce_currency = get_woocommerce_currency();
+		if ( ! $this->is_currency_supported( $woocommerce_currency ) ) {
+			$woocommerce_currencies = get_woocommerce_currencies();
+			$name = $woocommerce_currencies[ $woocommerce_currency ];
+
+			$this->disabled_error = sprintf( __( 'Gateway does not supports selected currency: %s.', 'emspay' ), esc_html( $name . ' (' . get_woocommerce_currency_symbol( $woocommerce_currency ) . ')' ) );
+			return false;
+		}
+
 		if ( ! $this->is_checkout_option_supported() ) {
 			$this->disabled_error = sprintf( __( 'Gateway does not supports selected checkout option: %s.', 'emspay' ), $this->integration->checkoutoption );
 			return false;
 		}
 
 		return true;
+	}
+
+
+	protected function is_currency_supported( $currency ) {
+		return Emspay_Currency::is_valid_currency( $currency );
 	}
 
 

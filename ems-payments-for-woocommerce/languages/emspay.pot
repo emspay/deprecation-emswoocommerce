@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Ems Payments For WooCommerce 1.0.0\n"
-"POT-Creation-Date: 2017-02-03 13:30+0200\n"
+"POT-Creation-Date: 2017-02-03 14:28+0200\n"
 "PO-Revision-Date: 2017-01-10 00:56+0100\n"
 "Last-Translator: \n"
 "Language-Team: DLWT\n"
@@ -21,62 +21,67 @@ msgstr ""
 msgid "EMS e-Commerce Gateway is not configured."
 msgstr ""
 
-#: abstracts/abstract-emspay-gateway.php:127
+#: abstracts/abstract-emspay-gateway.php:131
+#, php-format
+msgid "Gateway does not supports selected currency: %s."
+msgstr ""
+
+#: abstracts/abstract-emspay-gateway.php:136
 #, php-format
 msgid "Gateway does not supports selected checkout option: %s."
 msgstr ""
 
-#: abstracts/abstract-emspay-gateway.php:142
+#: abstracts/abstract-emspay-gateway.php:156
 msgid "Gateway Disabled"
 msgstr ""
 
-#: abstracts/abstract-emspay-gateway.php:178
+#: abstracts/abstract-emspay-gateway.php:192
 msgid "Enable/Disable"
 msgstr ""
 
-#: abstracts/abstract-emspay-gateway.php:184
+#: abstracts/abstract-emspay-gateway.php:198
 msgid "Title"
 msgstr ""
 
-#: abstracts/abstract-emspay-gateway.php:186
+#: abstracts/abstract-emspay-gateway.php:200
 msgid "This controls the title which the user sees during checkout."
 msgstr ""
 
-#: abstracts/abstract-emspay-gateway.php:191
+#: abstracts/abstract-emspay-gateway.php:205
 msgid "Description"
 msgstr ""
 
-#: abstracts/abstract-emspay-gateway.php:194
+#: abstracts/abstract-emspay-gateway.php:208
 msgid ""
 "This controls the description which the user sees during checkout."
 msgstr ""
 
-#: abstracts/abstract-emspay-gateway.php:198
+#: abstracts/abstract-emspay-gateway.php:212
 msgid "Debug Log"
 msgstr ""
 
-#: abstracts/abstract-emspay-gateway.php:200
+#: abstracts/abstract-emspay-gateway.php:214
 msgid "Enable logging"
 msgstr ""
 
-#: abstracts/abstract-emspay-gateway.php:202
+#: abstracts/abstract-emspay-gateway.php:216
 #, php-format
 msgid ""
 "Log EMS events, such as pay request, response, inside: <br><code>%s</"
 "code>"
 msgstr ""
 
-#: abstracts/abstract-emspay-gateway.php:302
+#: abstracts/abstract-emspay-gateway.php:316
 msgid ""
 "Thank you for your order, please click the button below to pay with "
 "your selected method."
 msgstr ""
 
-#: abstracts/abstract-emspay-gateway.php:319
+#: abstracts/abstract-emspay-gateway.php:333
 msgid "Payment"
 msgstr ""
 
-#: abstracts/abstract-emspay-gateway.php:437
+#: abstracts/abstract-emspay-gateway.php:451
 msgid "Invalid payment method."
 msgstr ""
 
@@ -415,20 +420,15 @@ msgstr ""
 msgid "Paying online with Klarna."
 msgstr ""
 
-#: gateways/class-emspay-gateway-klarna.php:118
-#, php-format
-msgid "Gateway does not supports selected currency: %s."
-msgstr ""
-
-#: gateways/class-emspay-gateway-klarna.php:128
+#: gateways/class-emspay-gateway-klarna.php:114
 msgid "Klarna is not available in your country."
 msgstr ""
 
-#: gateways/class-emspay-gateway-klarna.php:133
+#: gateways/class-emspay-gateway-klarna.php:119
 msgid "The currency does not correspond to the country's currency."
 msgstr ""
 
-#: gateways/class-emspay-gateway-klarna.php:174
+#: gateways/class-emspay-gateway-klarna.php:160
 msgid "Discount"
 msgstr ""
 
@@ -486,23 +486,23 @@ msgstr ""
 msgid "Paying online with Masterpass."
 msgstr ""
 
-#: gateways/class-emspay-gateway-paypal.php:23
+#: gateways/class-emspay-gateway-paypal.php:45
 msgid "EMS Paypal"
 msgstr ""
 
-#: gateways/class-emspay-gateway-paypal.php:24
+#: gateways/class-emspay-gateway-paypal.php:46
 msgid "Paypal description."
 msgstr ""
 
-#: gateways/class-emspay-gateway-paypal.php:30
+#: gateways/class-emspay-gateway-paypal.php:52
 msgid "Enable Paypal"
 msgstr ""
 
-#: gateways/class-emspay-gateway-paypal.php:35
+#: gateways/class-emspay-gateway-paypal.php:57
 msgid "Paypal"
 msgstr ""
 
-#: gateways/class-emspay-gateway-paypal.php:40
+#: gateways/class-emspay-gateway-paypal.php:62
 msgid "Paying online with Paypal."
 msgstr ""
 

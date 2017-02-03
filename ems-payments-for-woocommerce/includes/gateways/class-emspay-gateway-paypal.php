@@ -17,6 +17,28 @@ class Emspay_Gateway_Paypal extends Emspay_Gateway {
 
 	protected $payment_method = 'paypal';
 
+	protected $supported_currencies = array(
+		'AUD', // Australian Dollar (036)
+		'BRL', // Brazilian Real (986)
+		'CAD', // Canadian dollar (124)
+		'CZK', // Czech koruna (203)
+		'DKK', // Danish krone (208)
+		'EUR', // Euro (978)
+		'HKD', // Hong Kong dollar (344)
+		'HUF', // Hungarian forint (348)
+		'ISL', // Israeli new shekel (376)
+		'JPY', // Japanese yen (392)
+		'MXN', // Mexican peso (484)
+		'NOK', // Norwegian krone (578)
+		'NZD', // New Zealand dollar (554)
+		'PLN', // Polish zloty (985)
+		'GBP', // Pound sterling (826)
+		'SGD', // Singapore dollar (702)
+		'SEK', // Swedish krona (752)
+		'CHF', // Swiss franc (756)
+		'USD', // United States dollar (840)
+	);
+
 	protected function define_variables() {
 		$this->id                 = 'ems_paypal';
 		$this->has_fields         = false;
@@ -38,6 +60,11 @@ class Emspay_Gateway_Paypal extends Emspay_Gateway {
 
 	protected function get_description_field_default() {
 		return __( 'Paying online with Paypal.', 'emspay' );
+	}
+
+
+	protected function is_currency_supported( $currency ) {
+		return in_array( $currency, $this->supported_currencies );
 	}
 
 

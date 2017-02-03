@@ -109,20 +109,6 @@ class Emspay_Gateway_Klarna extends Emspay_Gateway {
 	}
 
 
-	public function is_valid_for_use() {
-		if ( ! parent::is_valid_for_use() ) {
-			return false;
-		}
-
-		if ( ! $this->is_currency_supported( get_woocommerce_currency() ) ) {
-			$this->disabled_error = sprintf( __( 'Gateway does not supports selected currency: %s.', 'emspay' ), get_woocommerce_currency() );
-			return false;
-		}
-
-		return true;
-	}
-
-
 	public function is_valid_for_order( $order ) {
 		if ( ! $this->is_country_supported( $order ) ) {
 			$this->disabled_error = __( 'Klarna is not available in your country.', 'emspay' );
