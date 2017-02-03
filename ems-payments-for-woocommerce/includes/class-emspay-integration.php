@@ -154,8 +154,7 @@ class Emspay_Integration extends WC_Integration {
 				'title'             => __( 'Pay mode', 'emspay' ),
 				'type'              => 'select',
 				'class'             => 'wc-enhanced-select',
-				'description'       => __( 'This field allows you to chosen mode for the transaction.', 'emspay' ),
-				'desc_tip'          => true,
+				'description'       => __( 'Chosen mode for the transaction when using the "classic" checkout option', 'emspay' ),
 				'default'           => 'payonly',
 				'options'           => array(
 					// shows a hosted page to collect the minimum set of information for the transaction
