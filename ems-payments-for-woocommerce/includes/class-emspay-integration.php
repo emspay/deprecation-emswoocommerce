@@ -178,6 +178,15 @@ class Emspay_Integration extends WC_Integration {
 
 
 	/**
+	 * Return the title for admin screens.
+	 * @return string
+	 */
+	public function get_method_title() {
+		return apply_filters( 'woocommerce_integration_title', $this->method_title, $this );
+	}
+
+
+	/**
 	 * Output the gateway settings screen.
 	 */
 	public function admin_options() {
