@@ -236,12 +236,12 @@ class Emspay_Integration extends WC_Integration {
 	 * @param  string $value
 	 * @return string
 	 */
-	public function validate_integration_storename_field( $key, $value ) {
+	public function validate_integration_storename_field( $key, $value = null ) {
 		return $this->validate_required_field( $key, $value, 'integration', __( 'Store Name (integration)', 'emspay' ) );
 	}
 
 
-	public function validate_production_storename_field( $key, $value ) {
+	public function validate_production_storename_field( $key, $value = null ) {
 		return $this->validate_required_field( $key, $value, 'production', __( 'Store Name (production)', 'emspay' ) );
 	}
 
@@ -255,12 +255,12 @@ class Emspay_Integration extends WC_Integration {
 	 * @param  string $value
 	 * @return string
 	 */
-	public function validate_integration_sharedsecret_field( $key, $value ) {
+	public function validate_integration_sharedsecret_field( $key, $value = null ) {
 		return $this->validate_required_field( $key, $value, 'integration', __( 'Shared Secret (integration)', 'emspay' ) );
 	}
 
 
-	public function validate_production_sharedsecret_field( $key, $value ) {
+	public function validate_production_sharedsecret_field( $key, $value = null ) {
 		return $this->validate_required_field( $key, $value, 'production', __( 'Shared Secret (production)', 'emspay' ) );
 	}
 
@@ -276,11 +276,16 @@ class Emspay_Integration extends WC_Integration {
 	 * @return string
 	 */
 	public function validate_required_field( $key, $value, $environment, $title ) {
-		if ( $this->get_option( 'environment' ) != $environment ) {
-			return $value;
+		if ( is_null( $value ) ) {
+			$field_key = $this->get_field_key( $key );
+			$value     = isset( $_POST[ $field_key ] ) ? $_POST[ $field_key ] : null;
 		}
 
 		$value = $this->validate_text_field( $key, $value );
+
+		if ( $this->get_option( 'environment' ) != $environment ) {
+			return $value;
+		}
 
 		if ( empty( $value ) ) {
 			WC_Admin_Settings::add_error( sprintf( __( 'Error: You must enter %s.', 'emspay' ), $title ) );
