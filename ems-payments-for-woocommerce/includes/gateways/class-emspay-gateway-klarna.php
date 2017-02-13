@@ -151,7 +151,21 @@ class Emspay_Gateway_Klarna extends Emspay_Gateway {
 				0 // shipping (added as total shipping)
 			);
 
-			$args[ 'item' . $i++ ] = implode( ';', $line_item );
+			self::add_line_item( $args, $i++, $line_item );
+		}
+
+		if ( $order->get_total_shipping() > 0 ) {
+			$line_item = array(
+				'IPG_SHIPPING', // id
+				__( 'Shipping fee', 'emspay' ), // description
+				1, // quantity
+				self::round_price( $order->get_total_shipping() + $order->get_shipping_tax() ), // item_total_price
+				self::round_price( $order->get_total_shipping() ), // sub_total
+				self::round_price( $order->get_shipping_tax() ), // vat_tax
+				0 // shipping (added as total shipping)
+			);
+
+			self::add_line_item( $args, $i++, $line_item );
 		}
 
 		if ( $order->get_total_discount() > 0 ) {
@@ -165,12 +179,19 @@ class Emspay_Gateway_Klarna extends Emspay_Gateway {
 				0 // shipping (added as total shipping)
 			);
 
-			$args[ 'item' . $i ] = implode( ';', $line_item );
+			self::add_line_item( $args, $i, $line_item );
 		}
 
 		return $args;
 	}
 
+  static public function add_line_item( &$args, $idx, $line_item ) {
+    $args[ 'item' . $idx ] = implode( ';', $line_item );
+  }
+
+	static public function round_price( $price ) {
+		return round( $price, wc_get_price_decimals() );
+	}
 
 	public function get_klarna_phone( $order ) {
 		return array(
@@ -215,9 +236,9 @@ class Emspay_Gateway_Klarna extends Emspay_Gateway {
 
 
 	public function hosted_payment_args( $args, $order ) {
-		// correct the shipping price, include shipping tax, and exclude it from vattax
-		$args[ 'shipping' ] = round( $args[ 'shipping' ] + $order->get_shipping_tax(), wc_get_price_decimals() );
-		$args[ 'vattax' ]   = round( $args[ 'vattax' ] - $order->get_shipping_tax(), wc_get_price_decimals() );
+		// we add the shipping price as line item
+		$args[ 'shipping' ] = 0;
+		$args[ 'subtotal' ] = self::round_price( $args[ 'subtotal' ] + $order->get_total_shipping() );
 
 		// remove phone number, because it override klarnaPhone field
 		unset( $args[ 'phone' ] );
