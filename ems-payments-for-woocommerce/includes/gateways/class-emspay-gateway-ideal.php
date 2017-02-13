@@ -21,6 +21,10 @@ class Emspay_Gateway_Ideal extends Emspay_Gateway {
 
 	public $select_bank = false;
 
+  protected $supported_currencies = array(
+		'EUR', // Euro (978)
+	);
+
 	protected function define_variables() {
 		$this->id                 = 'ems_ideal';
 		$this->has_fields         = false;
@@ -138,6 +142,11 @@ class Emspay_Gateway_Ideal extends Emspay_Gateway {
 		}
 
 		return $meta;
+	}
+
+
+	protected function is_currency_supported( $currency ) {
+		return in_array( $currency, $this->supported_currencies );
 	}
 
 
