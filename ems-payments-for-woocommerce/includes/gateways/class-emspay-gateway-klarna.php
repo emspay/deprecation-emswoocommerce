@@ -137,45 +137,23 @@ class Emspay_Gateway_Klarna extends Emspay_Gateway {
 	}
 
 
-	static public function get_items_count( $items, $order ) {
-		$count = count( $items );
-		if ( $order->get_shipping_tax() > 0 ) {
-			$count++;
-		}
-
-		return $count;
-	}
-
-
-	static public function get_line_item_tax( $tax, &$actual_tax, &$items_count ) {
-		if ( $items_count == 1 ) {
-			$tax = $actual_tax;
-		} else {
-			$items_count--;
-			$actual_tax -= $tax;
-		}
-
-		return $tax;
-	}
-
-
 	// id;description;quantity;item_total_price;sub_total;vat_tax;shipping
 	public function get_line_item_args( $order ) {
 		$args = array();
 
 		$i = 1;
 		$actual_tax = $order->get_total_tax();
-		$items = $order->get_items( array( 'line_item', 'fee' ) );
-		$items_count = self::get_items_count( $items, $order );
 
-		foreach ( $items as $item ) {
+		foreach ( $order->get_items( array( 'line_item', 'fee' ) ) as $item ) {
+			$actual_tax -= $order->get_line_tax( $item );
+
 			$line_item = array(
 				$item[ 'product_id' ], // id
 				$item[ 'name' ], // description
 				$item[ 'qty' ], // quantity
 				$order->get_item_subtotal( $item, true ), // item_total_price (inc tax)
 				$order->get_item_subtotal( $item ), // sub_total (exc tax)
-				self::get_line_item_tax( $this->get_item_subtotal_tax( $item ), $actual_tax, $items_count ), // vat_tax
+				$order->get_item_tax( $item ), // vat_tax
 				0 // shipping (added as total shipping)
 			);
 
@@ -183,7 +161,10 @@ class Emspay_Gateway_Klarna extends Emspay_Gateway {
 		}
 
 		if ( $order->get_total_shipping() > 0 ) {
-			$shipping_tax = self::get_line_item_tax( $order->get_shipping_tax(), $actual_tax, $items_count );
+			$shipping_tax = $order->get_shipping_tax();
+			if ( $shipping_tax > 0 && $shipping_tax > $actual_tax ) {
+				$shipping_tax = $actual_tax;
+			}
 
 			$line_item = array(
 				'IPG_SHIPPING', // id
