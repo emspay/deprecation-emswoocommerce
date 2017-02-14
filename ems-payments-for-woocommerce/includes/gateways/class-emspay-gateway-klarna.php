@@ -128,6 +128,7 @@ class Emspay_Gateway_Klarna extends Emspay_Gateway {
 		return true;
 	}
 
+
 	protected function get_item_subtotal_tax( $item, $round = true ) {
 		$price = $item['line_subtotal_tax'] / max( 1, $item['qty'] );
 		$price = $round ? wc_round_tax_total( $price ) : $price;
@@ -135,19 +136,46 @@ class Emspay_Gateway_Klarna extends Emspay_Gateway {
 		return $price;
 	}
 
+
+	static public function get_items_count( $items, $order ) {
+		$count = count( $items );
+		if ( $order->get_shipping_tax() > 0 ) {
+			$count++;
+		}
+
+		return $count;
+	}
+
+
+	static public function get_line_item_tax( $tax, &$actual_tax, &$items_count ) {
+		if ( $items_count == 1 ) {
+			$tax = $actual_tax;
+		} else {
+			$items_count--;
+			$actual_tax -= $tax;
+		}
+
+		return $tax;
+	}
+
+
 	// id;description;quantity;item_total_price;sub_total;vat_tax;shipping
 	public function get_line_item_args( $order ) {
 		$args = array();
 
 		$i = 1;
-		foreach ( $order->get_items( array( 'line_item', 'fee' ) ) as $item ) {
+		$actual_tax = $order->get_total_tax();
+		$items = $order->get_items( array( 'line_item', 'fee' ) );
+		$items_count = self::get_items_count( $items, $order );
+
+		foreach ( $items as $item ) {
 			$line_item = array(
 				$item[ 'product_id' ], // id
 				$item[ 'name' ], // description
 				$item[ 'qty' ], // quantity
 				$order->get_item_subtotal( $item, true ), // item_total_price (inc tax)
 				$order->get_item_subtotal( $item ), // sub_total (exc tax)
-				$this->get_item_subtotal_tax( $item ), // vat_tax
+				self::get_line_item_tax( $this->get_item_subtotal_tax( $item ), $actual_tax, $items_count ), // vat_tax
 				0 // shipping (added as total shipping)
 			);
 
@@ -155,13 +183,15 @@ class Emspay_Gateway_Klarna extends Emspay_Gateway {
 		}
 
 		if ( $order->get_total_shipping() > 0 ) {
+			$shipping_tax = self::get_line_item_tax( $order->get_shipping_tax(), $actual_tax, $items_count );
+
 			$line_item = array(
 				'IPG_SHIPPING', // id
 				__( 'Shipping fee', 'emspay' ), // description
 				1, // quantity
-				self::round_price( $order->get_total_shipping() + $order->get_shipping_tax() ), // item_total_price
+				self::round_price( $order->get_total_shipping() + $shipping_tax ), // item_total_price
 				self::round_price( $order->get_total_shipping() ), // sub_total
-				self::round_price( $order->get_shipping_tax() ), // vat_tax
+				self::round_price( $shipping_tax ), // vat_tax
 				0 // shipping (added as total shipping)
 			);
 
