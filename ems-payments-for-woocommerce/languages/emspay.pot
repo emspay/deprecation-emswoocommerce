@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Ems Payments For WooCommerce 1.0.0\n"
-"POT-Creation-Date: 2017-02-14 15:23+0100\n"
+"POT-Creation-Date: 2017-02-15 15:06+0100\n"
 "PO-Revision-Date: 2017-01-10 00:56+0100\n"
 "Last-Translator: \n"
 "Language-Team: DLWT\n"
@@ -85,24 +85,38 @@ msgstr ""
 msgid "Invalid payment method."
 msgstr ""
 
-#: class-emspay-gateway-response.php:91
+#: class-emspay-gateway-response.php:112
 #, php-format
 msgid "EMS payment approved (Reference number: %s)"
 msgstr ""
 
-#: class-emspay-gateway-response.php:108
+#: class-emspay-gateway-response.php:114
+#, php-format
+msgid ""
+"Order is APPROVED by Klarna. To complete the payment please visit "
+"Klarna Online (Klarna reference: %s)"
+msgstr ""
+
+#: class-emspay-gateway-response.php:133
 #, php-format
 msgid "EMS payment error: %s"
 msgstr ""
 
-#: class-emspay-gateway-response.php:111
+#: class-emspay-gateway-response.php:136
 #, php-format
 msgid "Payment error: %s"
 msgstr ""
 
-#: class-emspay-gateway-response.php:123
+#: class-emspay-gateway-response.php:148
 #, php-format
 msgid "EMS payment pending: %s"
+msgstr ""
+
+#: class-emspay-gateway-response.php:150
+#, php-format
+msgid ""
+"Order is PENDING by Klarna. Please visit Klarna Online (Klarna "
+"reference: %s)"
 msgstr ""
 
 #: class-emspay-integration.php:62
@@ -428,11 +442,11 @@ msgstr ""
 msgid "The currency does not correspond to the country's currency."
 msgstr ""
 
-#: gateways/class-emspay-gateway-klarna.php:190
+#: gateways/class-emspay-gateway-klarna.php:171
 msgid "Shipping fee"
 msgstr ""
 
-#: gateways/class-emspay-gateway-klarna.php:204
+#: gateways/class-emspay-gateway-klarna.php:185
 msgid "Discount"
 msgstr ""
 

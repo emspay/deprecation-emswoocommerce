@@ -36,8 +36,7 @@ class Emspay_Gateway_Response {
 
 					if ( $response->validateTransaction( $core_order ) ) {
 						// Store meta data to order.
-						update_post_meta( $order->id, '_ems_approval_code', $response->approval_code );
-						update_post_meta( $order->id, '_ems_status', $response->status );
+						self::save_emspay_meta( $order, $response );
 
 						$status = strtolower( $response->status );
 						call_user_func( array( 'Emspay_Gateway_Response', 'payment_status_' . $status ), $order, $response );
@@ -57,6 +56,28 @@ class Emspay_Gateway_Response {
 
 		wp_die( 'EMS Response Failure', 'EMS response', 500 );
 	}
+
+
+	protected static function save_emspay_meta( $order, $response ) {
+		// Store meta data to order.
+		foreach( self::get_emspay_meta( $response ) as $key => $value ) {
+			update_post_meta( $order->id, $key, $value );
+		}
+	}
+
+
+	protected static function get_emspay_meta( $response ) {
+		return array(
+			'_ems_approval_code' => $response->approval_code,
+			'_ems_status'        => $response->status,
+		);
+	}
+
+
+	protected static function is_klarna_payment( $order ) {
+		return $order->ems_payment_method == 'klarna';
+	}
+
 
 	protected static function get_core_option() {
 		return emspay_gateway()->get_integration()->get_core_options();
@@ -89,6 +110,10 @@ class Emspay_Gateway_Response {
 
 			// Add order note
 			$order->add_order_note( sprintf( __( 'EMS payment approved (Reference number: %s)', 'emspay' ), $response->ipgTransactionId ) );
+			if ( self::is_klarna_payment( $order ) ) {
+				$order->add_order_note( sprintf( __( 'Order is APPROVED by Klarna. To complete the payment please visit Klarna Online (Klarna reference: %s)', 'emspay' ), $response->endpointTransactionId ) );
+			}
+
 			// Payment complete
 			$order->payment_complete( $response->refnumber );
 		} else {
@@ -119,8 +144,12 @@ class Emspay_Gateway_Response {
 		if ( !self::order_has_status( $order, 'on-hold' ) ) {
 			Emspay_Gateway::log( 'Order #' . $order->id . ' payment on hold.');
 
-			// Set order status to failed
+			// Set order status to on-hold
 			$order->update_status( 'on-hold', sprintf( __( 'EMS payment pending: %s', 'emspay' ), $response->status )  );
+			if ( self::is_klarna_payment( $order ) ) {
+				$order->add_order_note( sprintf( __( 'Order is PENDING by Klarna. Please visit Klarna Online (Klarna reference: %s)', 'emspay' ), $response->endpointTransactionId ) );
+			}
+
 			$order->reduce_order_stock();
 
   		//WC()->cart->empty_cart();
