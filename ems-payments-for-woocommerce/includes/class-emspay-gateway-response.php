@@ -111,7 +111,7 @@ class Emspay_Gateway_Response {
 			// Add order note
 			$order->add_order_note( sprintf( __( 'EMS payment approved (Reference number: %s)', 'emspay' ), $response->ipgTransactionId ) );
 			if ( self::is_klarna_payment( $order ) ) {
-				$order->add_order_note( sprintf( __( 'Order is APPROVED by Klarna. To complete the payment please visit Klarna Online (Klarna reference: %s)', 'emspay' ), $response->endpointTransactionId ) );
+				$order->add_order_note( __( 'Please visit the EMS virtual terminal to approve the payment for Klarna. The current order status "proceeding" or "completed" does not mean that the payment has been approved.', 'emspay' ) );
 			}
 
 			// Payment complete
@@ -147,7 +147,7 @@ class Emspay_Gateway_Response {
 			// Set order status to on-hold
 			$order->update_status( 'on-hold', sprintf( __( 'EMS payment pending: %s', 'emspay' ), $response->status )  );
 			if ( self::is_klarna_payment( $order ) ) {
-				$order->add_order_note( sprintf( __( 'Order is PENDING by Klarna. Please visit Klarna Online (Klarna reference: %s)', 'emspay' ), $response->endpointTransactionId ) );
+				$order->add_order_note( __( 'Please visit the EMS virtual terminal to approve the payment for Klarna. The current order status "proceeding" or "completed" does not mean that the payment has been approved.', 'emspay' ) );
 			}
 
 			$order->reduce_order_stock();

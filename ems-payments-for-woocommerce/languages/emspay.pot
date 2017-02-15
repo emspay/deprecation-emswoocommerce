@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Ems Payments For WooCommerce 1.0.0\n"
-"POT-Creation-Date: 2017-02-15 15:06+0100\n"
+"POT-Creation-Date: 2017-02-15 16:37+0100\n"
 "PO-Revision-Date: 2017-01-10 00:56+0100\n"
 "Last-Translator: \n"
 "Language-Team: DLWT\n"
@@ -91,10 +91,11 @@ msgid "EMS payment approved (Reference number: %s)"
 msgstr ""
 
 #: class-emspay-gateway-response.php:114
-#, php-format
+#: class-emspay-gateway-response.php:150
 msgid ""
-"Order is APPROVED by Klarna. To complete the payment please visit "
-"Klarna Online (Klarna reference: %s)"
+"Please visit the EMS virtual terminal to approve the payment for "
+"Klarna. The current order status \"proceeding\" or \"completed\" does "
+"not mean that the payment has been approved."
 msgstr ""
 
 #: class-emspay-gateway-response.php:133
@@ -110,13 +111,6 @@ msgstr ""
 #: class-emspay-gateway-response.php:148
 #, php-format
 msgid "EMS payment pending: %s"
-msgstr ""
-
-#: class-emspay-gateway-response.php:150
-#, php-format
-msgid ""
-"Order is PENDING by Klarna. Please visit Klarna Online (Klarna "
-"reference: %s)"
 msgstr ""
 
 #: class-emspay-integration.php:62
