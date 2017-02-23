@@ -173,6 +173,18 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 		//add_action( 'woocommerce_thankyou_' . $this->id, array( $this, 'thankyou_page' ) );
 		add_action( 'woocommerce_api_emspay_gateway', array( 'Emspay_Gateway_Response', 'response_handler' ) );
 		add_filter( 'woocommerce_emspay_' . $this->id . '_hosted_args', array( $this, 'hosted_payment_args' ), 10, 2 );
+		add_filter( 'woocommerce_thankyou_order_received_text', array( $this, 'thankyou_order_received_text' ) );
+	}
+
+
+	protected function thankyou_order_received_text( $text, $order ) {
+		if ( ! is_null( $order ) && in_array( $order->ems_payment_method, $supported_payment_methods ) ) {
+			if ( $order->has_status( 'on-hold' ) ) {
+				$text = __( 'Thank you. Your order has been received. Awaiting payment, system need to confirm payment.', 'woocommerce' );
+			}
+		}
+
+		return $text;
 	}
 
 
