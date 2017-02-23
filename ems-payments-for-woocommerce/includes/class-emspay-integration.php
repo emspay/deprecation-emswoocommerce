@@ -74,7 +74,14 @@ class Emspay_Integration extends WC_Integration {
 
 		// Actions.
 		add_action( 'woocommerce_update_options_integration_' . $this->id, array( $this, 'process_admin_options' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_script' ) );
+	}
 
+
+	public function enqueue_script() {
+		if ( key_exists( 'page', $_GET ) && $_GET['page'] === 'wc-settings' && key_exists( 'tab', $_GET ) && $_GET['tab'] === 'integration' ) {
+			wp_enqueue_script( 'emspay', plugin_dir_url( EMSPAY_PLUGIN_FILE ) . 'assets/js/emspay-integration.js', array('jquery') );
+		}
 	}
 
 
