@@ -177,7 +177,7 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 	}
 
 
-	protected function thankyou_order_received_text( $text, $order ) {
+	public function thankyou_order_received_text( $text, $order ) {
 		if ( ! is_null( $order ) && in_array( $order->ems_payment_method, $supported_payment_methods ) ) {
 			if ( $order->has_status( 'on-hold' ) ) {
 				$text = __( 'Thank you. Your order has been received. Awaiting payment, system need to confirm payment.', 'woocommerce' );
