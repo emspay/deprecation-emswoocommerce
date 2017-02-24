@@ -122,7 +122,7 @@ class Emspay_Integration extends WC_Integration {
 			),
 			'integration_sharedsecret' => array(
 				'title'             => __( 'Shared Secret (integration)', 'emspay' ),
-				'type'              => 'text',
+				'type'              => 'password',
 				'description'       => __( 'This is the shared secret provided to you by EMS.', 'emspay' ),
 				'desc_tip'          => true,
 				'default'           => '',
@@ -136,7 +136,7 @@ class Emspay_Integration extends WC_Integration {
 			),
 			'production_sharedsecret' => array(
 				'title'             => __( 'Shared Secret (production)', 'emspay' ),
-				'type'              => 'text',
+				'type'              => 'password',
 				'description'       => __( 'This is the shared secret provided to you by EMS.', 'emspay' ),
 				'desc_tip'          => true,
 				'default'           => '',
