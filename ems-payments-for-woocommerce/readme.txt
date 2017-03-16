@@ -18,6 +18,7 @@ This plugin will add support for the following EMS payments methods to your WooC
 * iDEAL
 * MasterPass
 * Klarna
+* Sofort
 * Maestro, Maestro UK
 
 = Provisioning =
@@ -43,6 +44,14 @@ https://www.emspay.eu/en/about-ems/contact
 = Features =
 
 * Support for all available EMS payment methods
+* Enable / disable payment methods 
+* Able to configure each payment method
+* Toggle 3D secure transactions for the credit card payment method
+* Switch between integration and production modes
+* Select the pay mode of your preference (payonly, payplus, fullpay)
+* Toggle payment method icons
+* Transaction logs / notes in order
+* IPN handling
 
 == Frequently Asked Questions ==
 
