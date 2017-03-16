@@ -20,6 +20,26 @@ This plugin will add support for the following EMS payments methods to your WooC
 * Klarna
 * Maestro, Maestro UK
 
+= Provisioning =
+
+* Are you already a customer ?
+
+If you are already registered as an EMS merchant then please enter the credentials and settings below.	
+
+For new customers please follow the link below to acquire an EMS merchant account.
+
+* Becoming an EMS customer
+
+Get a merchant account via this link:	https://www.emspay.eu/en/request-an-offer
+
+* Contact EMS Support
+
+Visit the FAQ:	
+http://www.emspay.eu/en/customer-service/faq 
+
+Contact information:	
+https://www.emspay.eu/en/about-ems/contact 
+
 = Features =
 
 * Support for all available EMS payment methods
