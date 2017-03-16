@@ -31,7 +31,7 @@ For new customers please follow the link below to acquire an EMS merchant accoun
 
 * Becoming an EMS customer
 
-Get a merchant account via this link:	https://www.emspay.eu/en/request-an-offer
+Get a merchant account by sending an email with your request to integrations@emspay.eu
 
 * Contact EMS Support
 
