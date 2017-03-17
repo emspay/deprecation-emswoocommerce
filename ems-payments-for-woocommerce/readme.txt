@@ -23,23 +23,9 @@ This plugin will add support for the following EMS payments methods to your WooC
 
 = Provisioning =
 
-* Are you already a customer ?
-
-If you are already registered as an EMS merchant then please enter the credentials and settings below.	
-
-For new customers please follow the link below to acquire an EMS merchant account.
-
 * Becoming an EMS customer
 
 Get a merchant account by sending an email with your request to integrations@emspay.eu
-
-* Contact EMS Support
-
-Visit the FAQ:	
-http://www.emspay.eu/en/customer-service/faq 
-
-Contact information:	
-https://www.emspay.eu/en/about-ems/contact 
 
 = Features =
 
@@ -70,6 +56,18 @@ Most of the time a white screen means a PHP error. Because PHP won't show error 
 Please contact us via the above "support" tab and add a ticket: please describe your problem as detailed as possible. Include screenshots where appropriate.
 Where possible, also include the log file. You can find the log files in `/wp-content/uploads/wc-logs/` or `/wp-content/plugin/woocommerce/logs`.
 
+* Contact EMS Support
+
+Visit the FAQ:	
+http://www.emspay.eu/en/customer-service/faq 
+
+Contact information:	
+https://www.emspay.eu/en/about-ems/contact 
+
+== Screenshots ==
+
+1. 
+
 == Installation ==
 
 = Minimum Requirements =
@@ -97,6 +95,9 @@ Where possible, also include the log file. You can find the log files in `/wp-co
 = Updating =
 
 Automatic updates should work flawlessly; as always though, ensure you backup your site just in case.
+
+== Upgrade Notice ==
+* none
 
 == Changelog ==
 
