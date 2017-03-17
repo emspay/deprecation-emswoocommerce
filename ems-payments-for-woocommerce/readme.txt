@@ -1,5 +1,6 @@
 === EMS payments for WooCommerce ===
 Contributors: dave.ligthart
+Donate link: http://emspay.eu
 Tags: ems, emspay, payments, woocommerce, e-commerce, webshop, psp, ideal, sofort, credit card, creditcard, visa, mastercard, masterpass, bancontact, bitcoin, paysafecard, direct debit, incasso, sepa, banktransfer, overboeking, betalingen, klarna
 Requires at least: 4.4
 Tested up to: 4.7.2
