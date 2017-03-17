@@ -66,7 +66,7 @@ https://www.emspay.eu/en/about-ems/contact
 
 == Screenshots ==
 
-1. 
+1. Checkout page: EMS payment methods
 
 == Installation ==
 
