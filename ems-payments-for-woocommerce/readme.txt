@@ -31,7 +31,7 @@ Get a merchant account by sending an email with your request to integrations@ems
 = Features =
 
 * Support for all available EMS payment methods
-* Enable / disable payment methods 
+* Enable / disable payment methods
 * Able to configure each payment method
 * Toggle 3D secure transactions for the credit card payment method
 * Switch between integration and production modes
@@ -59,11 +59,11 @@ Where possible, also include the log file. You can find the log files in `/wp-co
 
 * Contact EMS Support
 
-Visit the FAQ:	
-http://www.emspay.eu/en/customer-service/faq 
+Visit the FAQ:
+http://www.emspay.eu/en/customer-service/faq
 
-Contact information:	
-https://www.emspay.eu/en/about-ems/contact 
+Contact information:
+https://www.emspay.eu/en/about-ems/contact
 
 == Screenshots ==
 
@@ -76,7 +76,7 @@ https://www.emspay.eu/en/about-ems/contact
 * PHP version 5.6 or greater
 * PHP extensions enabled: cURL, JSON
 * WordPress 4.4 or greater
-* WooCommerce 2.2.0 or greater
+* WooCommerce 2.2.4 or greater
 
 = Automatic installation =
 
