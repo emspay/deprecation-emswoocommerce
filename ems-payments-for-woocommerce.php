@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Plugin Name:       EMS payments for WooCommerce
  * Plugin URI:        https://wordpress.org/plugins/ems-payments-for-woocommerce/
  * Description:       Accept payments in WooCommerce with the official EMS e-Commerce Gateway plugin.
- * Version:           1.0.0
+ * Version:           1.0.2
  * Author:            EMS
  * Author URI:        http://emspay.eu/
  * License:           GPL-2.0+
