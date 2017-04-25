@@ -339,11 +339,7 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 		self::log( 'Payment form fields for Order #' . $order_id . ' ' . print_r( $form_fields, true ) );
 ?>
 		<form method="post" action="<?php echo $hosted_payment->getFormAction(); ?>">
-		<?php foreach( $form_fields as $name => $value ) { 
-			if($name == 'vattax') { 
-				$value	=	number_format($value,2); 
-			} 
-		?>
+		<?php foreach( $form_fields as $name => $value ) { ?>
 			<input type="hidden" name="<?php echo $name; ?>" value="<?php echo esc_attr( $value ); ?>">
 		<?php } ?>
 			<input type="submit" class="button" value="<?php esc_attr_e( 'Payment', 'emspay' ); ?>" />
@@ -361,14 +357,19 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 		return $order->get_subtotal();
 	}
 
+	protected function get_vattax( $order ) {
+		$vattax		=	number_format($order->get_total_tax(),2);
+		return $vattax;
+	}
+
 
 	protected function get_hosted_payment_args( $order ) {
-		$args = apply_filters( 'woocommerce_emspay_' . $this->id . '_hosted_args', array_merge(
+		$args 		= 	apply_filters( 'woocommerce_emspay_' . $this->id . '_hosted_args', array_merge(
 			array(
 				'mobile'          => wp_is_mobile(),
 				'chargetotal'     => $order->get_total(),
 				'shipping'        => $order->get_total_shipping(),
-				'vattax'          => $order->get_total_tax(),
+				'vattax'          => $this->get_vattax( $order ),
 				'subtotal'        => $this->get_order_subtotal( $order ),
 				'orderId'         => $order->id,
 				'language'        => $this->get_emspay_language(),
@@ -383,7 +384,6 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 
 		return $args;
 	}
-
 
 	protected function include_billing_args() {
 		return in_array( $this->integration->mode, array( 'payplus', 'fullpay' ) );
