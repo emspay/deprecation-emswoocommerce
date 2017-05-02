@@ -361,12 +361,6 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 		$vattax		=	number_format($order->get_total_tax(),2);
 		return $vattax;
 	}
-
-
-	protected function get_vattax( $order ) {
-		$vattax		=	number_format($order->get_total_tax(),2);
-		return $vattax;
-	}
 	
 	protected function get_hosted_payment_args( $order ) {
 		$args 		= 	apply_filters( 'woocommerce_emspay_' . $this->id . '_hosted_args', array_merge(
