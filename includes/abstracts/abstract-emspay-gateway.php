@@ -357,6 +357,11 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 		return $order->get_subtotal();
 	}
 
+	protected function get_vattax( $order ) {
+		$vattax		=	number_format($order->get_total_tax(),2);
+		return $vattax;
+	}
+
 
 	protected function get_vattax( $order ) {
 		$vattax		=	number_format($order->get_total_tax(),2);
@@ -383,7 +388,6 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 		), $order );
 		return $args;
 	}
-
 
 	protected function include_billing_args() {
 		return in_array( $this->integration->mode, array( 'payplus', 'fullpay' ) );
