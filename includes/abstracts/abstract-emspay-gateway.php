@@ -358,13 +358,18 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 	}
 
 
+	protected function get_vattax( $order ) {
+		$vattax		=	number_format($order->get_total_tax(),2);
+		return $vattax;
+	}
+	
 	protected function get_hosted_payment_args( $order ) {
-		$args = apply_filters( 'woocommerce_emspay_' . $this->id . '_hosted_args', array_merge(
+		$args 		= 	apply_filters( 'woocommerce_emspay_' . $this->id . '_hosted_args', array_merge(
 			array(
 				'mobile'          => wp_is_mobile(),
 				'chargetotal'     => $order->get_total(),
 				'shipping'        => $order->get_total_shipping(),
-				'vattax'          => $order->get_total_tax(),
+				'vattax'          => $this->get_vattax( $order ),
 				'subtotal'        => $this->get_order_subtotal( $order ),
 				'orderId'         => $order->id,
 				'language'        => $this->get_emspay_language(),
@@ -376,7 +381,6 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 			$this->get_billing_args( $order ),
 			$this->get_shipping_args( $order )
 		), $order );
-
 		return $args;
 	}
 
@@ -473,3 +477,5 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 	}
 
 }
+
+

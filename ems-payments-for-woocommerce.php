@@ -74,6 +74,7 @@ final class Emspay_Gateway_Plugin {
 		$this->define_constants();
 		$this->includes();
 		$this->init_hooks();
+
 	}
 
 
@@ -137,6 +138,8 @@ final class Emspay_Gateway_Plugin {
 
 			$this->register_gateways();
 
+			$this->register_filters();
+
 			// If needed show admin missing settings warning
 			add_action( 'admin_notices', array( $this, 'show_settings_warning' ) );
 
@@ -188,6 +191,21 @@ final class Emspay_Gateway_Plugin {
 		// Register the gateways.
 		add_filter( 'woocommerce_payment_gateways', array( $this, 'payment_gateways' ) );
 	}
+
+
+	/**
+	 * Init filters.
+	 *
+	 * @access private
+	 * @since  1.0.0
+	 * @return void
+	 */
+	private function register_filters() {
+		// Include required classes.
+		include_once 'includes/filters/class-emspay-filters.php';
+		$Emsfilters	=	new Emspay_Filters();
+	}
+
 
 
 	/**
