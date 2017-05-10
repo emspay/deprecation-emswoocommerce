@@ -168,7 +168,7 @@ class Request {
         $this->order->transactionTime .
         $this->order->chargetotal .
         $this->order->currency .
-        $this->options->getSharedSecret()
+        html_entity_decode($this->options->getSharedSecret())
       )
     );
   }
