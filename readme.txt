@@ -102,10 +102,12 @@ Automatic updates should work flawlessly; as always though, ensure you backup yo
 
 == Changelog ==
 
+= 1.0.7 =
+* Excluded tests from release
+
 = 1.0.6 =
 * Fixed vat tax calculation
 * Fixed checkCredentials
-* Excluded tests from release
 * Updated license information
 
 = 1.0.5 =
