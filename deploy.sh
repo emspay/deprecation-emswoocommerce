@@ -68,7 +68,9 @@ README.md
 .git
 .gitignore" "$SVNPATH/trunk/"
 
-svn propset svn:ignore includes/core/tests "$SVNPATH/trunk/"
+svn propset svn:ignore "tests" "$SVNPATH/trunk/includes/core/"
+
+svn delete --force "$SVNPATH/trunk/includes/core/tests"
 
 echo "Changing directory to SVN and committing to trunk"
 cd $SVNPATH/trunk/
