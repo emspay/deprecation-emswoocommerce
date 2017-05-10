@@ -90,7 +90,7 @@ class Options {
   }
 
   function getSharedSecret() {
-    return $this->fields['sharedsecret'];
+    return html_entity_decode($this->fields['sharedsecret']);
   }
 
   function getEnvironment() {
