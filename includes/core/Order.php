@@ -113,7 +113,7 @@ class Order {
   );
 
   static function getDateTime() {
-    return date("Y:m:d-H:i:s");
+    return date_i18n('Y:m:d-H:i:s');
   }
 
   static function init() {
