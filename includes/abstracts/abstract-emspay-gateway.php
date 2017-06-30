@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @extends	WC_Payment_Gateway
  * @category Class
  * @author	 DLWT
- * @version	1.0.0
+ * @version	1.0.1
  */
 abstract class Emspay_Gateway extends WC_Payment_Gateway {
 
@@ -348,7 +348,11 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 <?php
 	}
 
-
+    /**
+     * Get order sub total amount.
+     * @param $order
+     * @return float
+     */
 	protected function get_order_subtotal( $order ) {
 		if ( $order->get_total_discount() > 0 ) {
 			return round( $order->get_subtotal() - $order->get_total_discount(), wc_get_price_decimals() );
@@ -357,19 +361,41 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway {
 		return $order->get_subtotal();
 	}
 
-	protected function get_vattax( $order ) {
-		$vattax		=	number_format($order->get_total_tax(),2);
-		return $vattax;
+    /**
+     * Get total tax amount.
+     * @param $order
+     * @return float
+     */
+	protected function get_vattax($order) {
+		return round($order->get_total_tax(), wc_get_price_decimals());
 	}
+
+    /**
+     * Get total shipping amount.
+     * @param $order
+     * @return float
+     */
+	protected function get_total_shipping($order) {
+	    return round($order->get_total_shipping(), wc_get_price_decimals());
+    }
+
+    /**
+     * Get total order amount.
+     * @param $order
+     * @return float
+     */
+    protected function get_total($order) {
+	    return $order->get_total();
+    }
 	
-	protected function get_hosted_payment_args( $order ) {
+	protected function get_hosted_payment_args($order) {
 		$args 		= 	apply_filters( 'woocommerce_emspay_' . $this->id . '_hosted_args', array_merge(
 			array(
 				'mobile'          => wp_is_mobile(),
-				'chargetotal'     => $order->get_total(),
-				'shipping'        => $order->get_total_shipping(),
-				'vattax'          => $this->get_vattax( $order ),
-				'subtotal'        => $this->get_order_subtotal( $order ),
+				'chargetotal'     => $this->get_total($order),
+				'shipping'        => $this->get_total_shipping($order),
+				'vattax'          => $this->get_vattax($order),
+				'subtotal'        => $this->get_order_subtotal($order),
 				'orderId'         => $order->id,
 				'language'        => $this->get_emspay_language(),
 				'paymentMethod'   => $order->ems_payment_method,
