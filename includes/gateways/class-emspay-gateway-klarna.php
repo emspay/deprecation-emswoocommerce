@@ -192,7 +192,7 @@ class Emspay_Gateway_Klarna extends Emspay_Gateway
      */
     protected function checkSum($chargeTotal, $subTotal, $shippingTotal) {
         $checkSum = $chargeTotal - $subTotal - $shippingTotal;
-        return $checkSum;
+        return self::round_price($checkSum);
     }
 
     /**
@@ -280,16 +280,6 @@ class Emspay_Gateway_Klarna extends Emspay_Gateway
     }
 
     /**
-     * Round price.
-     * @param $price
-     * @return float
-     */
-    static public function round_price($price)
-    {
-        return round($price, wc_get_price_decimals());
-    }
-
-    /**
      * Get phone.
      * @param $order
      * @return array
@@ -348,10 +338,9 @@ class Emspay_Gateway_Klarna extends Emspay_Gateway
      */
     public function hosted_payment_args($args, $order)
     {
-        $totalCharge = $this->get_total($order);
-
+        $totalChargeWithoutTax = self::round_price($order->get_total() - $order->get_total_tax());
         $totalSub = self::round_price($args['subtotal'] + $order->get_total_shipping());
-        $totalSub += $this->checkSum(totalCharge, $args['subtotal'], $order->get_total_shipping());
+        $totalSub += $this->checkSum($totalChargeWithoutTax, $args['subtotal'], $order->get_total_shipping());
 
         // we add the shipping price as line item
         $args['shipping'] = 0;

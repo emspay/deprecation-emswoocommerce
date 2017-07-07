@@ -409,7 +409,7 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway
     protected function get_order_subtotal($order)
     {
         if ($order->get_total_discount() > 0) {
-            return round($order->get_subtotal() - $order->get_total_discount(), wc_get_price_decimals());
+            return self::round_price($order->get_subtotal() - $order->get_total_discount());
         }
 
         return $order->get_subtotal();
@@ -422,7 +422,7 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway
      */
     protected function get_vattax($order)
     {
-        return round($order->get_total_tax(), wc_get_price_decimals());
+        return self::round_price($order->get_total_tax());
     }
 
     /**
@@ -432,7 +432,7 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway
      */
     protected function get_total_shipping($order)
     {
-        return round($order->get_total_shipping() + $order->get_shipping_tax(), wc_get_price_decimals());
+        return self::round_price($order->get_total_shipping() + $order->get_shipping_tax());
     }
 
     /**
@@ -452,7 +452,6 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway
      */
     protected function processTotals($order)
     {
-
         $totalCharge = $this->get_total($order);
         $totalSub = $this->get_order_subtotal($order);
 
@@ -463,7 +462,7 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway
 
         if ($checkSum != 0) {
             // fix rounding issue with shipping.
-            $totalShipping += $checkSum;
+            $totalShipping += self::round_price($checkSum);
         }
 
         return array(
@@ -617,6 +616,16 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway
     public function hosted_payment_args($args, $order)
     {
         return $args;
+    }
+
+    /**
+     * Round price.
+     * @param $price
+     * @return float
+     */
+    static public function round_price($price)
+    {
+        return round($price, wc_get_price_decimals());
     }
 
 }
