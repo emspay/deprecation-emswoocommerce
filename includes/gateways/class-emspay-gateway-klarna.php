@@ -236,16 +236,20 @@ class Emspay_Gateway_Klarna extends Emspay_Gateway
             }
 
             $shipping_total = self::round_price($order->get_total_shipping() + $shipping_tax);
-            $shipping_total += $this->checkSum(self::round_price($order->get_total()), $sub_total, $shipping_total);
+            $checkSum = $this->checkSum(self::round_price($order->get_total()), $sub_total, $shipping_total);
+            $shipping_total += $checkSum;
+            $shipping_sub_total = self::round_price($order->get_total_shipping());
+            $shipping_sub_total += $checkSum;
+            $shipping_tax = self::round_price($shipping_tax);
 
             $line_item = array(
-                'IPG_SHIPPING', // id
-                __('Shipping fee', 'emspay'), // description
-                1, // quantity
-                $shipping_total, // item_total_price
-                self::round_price($order->get_total_shipping()), // sub_total
-                self::round_price($shipping_tax), // vat_tax
-                0 // shipping (added as total shipping)
+                'IPG_SHIPPING',                         // id
+                __('Shipping fee', 'emspay'),           // description
+                1,                                      // quantity
+                $shipping_total,                        // item_total_price
+                $shipping_sub_total,                    // sub_total
+                $shipping_tax,                          // vat_tax
+                0                                       // shipping (added as total shipping)
             );
 
             self::add_line_item($args, $i++, $line_item);
