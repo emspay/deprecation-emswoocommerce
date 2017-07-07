@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
  *
  * @package    Ems_Payments_For_WooCommerce
  * @extends    WC_Payment_Gateway
- * @category Class
+ * @category   Class
  * @author     DLWT
  * @version    1.0.2
  */

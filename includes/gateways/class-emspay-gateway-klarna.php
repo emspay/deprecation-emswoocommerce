@@ -190,7 +190,8 @@ class Emspay_Gateway_Klarna extends Emspay_Gateway
      * @param $shippingTotal
      * @return mixed
      */
-    protected function checkSum($chargeTotal, $subTotal, $shippingTotal) {
+    protected function checkSum($chargeTotal, $subTotal, $shippingTotal)
+    {
         $checkSum = $chargeTotal - $subTotal - $shippingTotal;
         return self::round_price($checkSum);
     }
@@ -226,7 +227,7 @@ class Emspay_Gateway_Klarna extends Emspay_Gateway
 
             self::add_line_item($args, $i++, $line_item);
 
-            $sub_total +=  $item['qty'] * $order->get_item_subtotal($item, true);
+            $sub_total += $item['qty'] * $order->get_item_subtotal($item, true);
         }
 
         if ($order->get_total_shipping() > 0) {
