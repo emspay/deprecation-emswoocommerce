@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
  * @extends  Emspay_Gateway
  * @category Class
  * @author   DLWT
- * @version  1.0.1
+ * @version  1.0.2
  */
 class Emspay_Gateway_Klarna extends Emspay_Gateway
 {
@@ -48,6 +48,9 @@ class Emspay_Gateway_Klarna extends Emspay_Gateway
         'SEK', // Swedish krona (752)
     );
 
+    /**
+     * Define field templates.
+     */
     protected function define_variables()
     {
         $this->id = 'ems_klarna';
@@ -57,24 +60,32 @@ class Emspay_Gateway_Klarna extends Emspay_Gateway
         $this->icon = plugin_dir_url(EMSPAY_PLUGIN_FILE) . 'assets/images/icons/klarna.png';
     }
 
-
+    /**
+     * Get label for payment method enabling.
+     * @return mixed
+     */
     protected function get_enabled_field_label()
     {
         return __('Enable Klarna', 'emspay');
     }
 
-
+    /**
+     * Get default title field.
+     * @return mixed
+     */
     protected function get_title_field_default()
     {
         return __('Klarna', 'emspay');
     }
 
-
+    /**
+     * Get default description field.
+     * @return mixed
+     */
     protected function get_description_field_default()
     {
         return __('Paying online with Klarna.', 'emspay');
     }
-
 
     /**
      * Process standard payments.
@@ -99,25 +110,41 @@ class Emspay_Gateway_Klarna extends Emspay_Gateway
         );
     }
 
-
+    /**
+     * Check currency.
+     * @param $currency
+     * @return bool
+     */
     protected function is_currency_supported($currency)
     {
         return in_array($currency, $this->supported_currencies);
     }
 
-
+    /**
+     * Check country.
+     * @param $order
+     * @return bool
+     */
     protected function is_country_supported($order)
     {
         return array_key_exists($order->billing_country, $this->supported_countries);
     }
 
-
+    /**
+     * Check country currency.
+     * @param $order
+     * @return bool
+     */
     protected function is_country_currency_supported($order)
     {
         return in_array($order->billing_country . '-' . $order->get_order_currency(), $this->supported_country_currency);
     }
 
-
+    /**
+     * Check country and currency.
+     * @param $order
+     * @return bool
+     */
     public function is_valid_for_order($order)
     {
         if (!$this->is_country_supported($order)) {
@@ -133,13 +160,21 @@ class Emspay_Gateway_Klarna extends Emspay_Gateway
         return true;
     }
 
-
+    /**
+     * Include billing args.
+     * @return bool
+     */
     protected function include_billing_args()
     {
         return true;
     }
 
-
+    /**
+     * Get item sub total tax.
+     * @param $item
+     * @param bool $round
+     * @return float|int
+     */
     protected function get_item_subtotal_tax($item, $round = true)
     {
         $price = $item['line_subtotal_tax'] / max(1, $item['qty']);
@@ -148,10 +183,28 @@ class Emspay_Gateway_Klarna extends Emspay_Gateway
         return $price;
     }
 
+    /**
+     * Check sum should be 0, otherwise compensate shipping costs.
+     * @param $chargeTotal
+     * @param $subTotal
+     * @param $shippingTotal
+     * @return mixed
+     */
+    protected function checkSum($chargeTotal, $subTotal, $shippingTotal) {
+        $checkSum = $chargeTotal - $subTotal - $shippingTotal;
+        return $checkSum;
+    }
 
-    // id;description;quantity;item_total_price;sub_total;vat_tax;shipping
+    /**
+     * Get line item args
+     * @param $order
+     * @return array
+     */
     public function get_line_item_args($order)
     {
+
+        // id;description;quantity;item_total_price;sub_total;vat_tax;shipping
+
         $args = array();
 
         $i = 1;
@@ -183,12 +236,7 @@ class Emspay_Gateway_Klarna extends Emspay_Gateway
             }
 
             $shipping_total = self::round_price($order->get_total_shipping() + $shipping_tax);
-
-            if (($sub_total + $shipping_total) + 0.01 == $order->get_total()) {
-                $shipping_total += 0.01;
-            } elseif (($sub_total + $shipping_total) - 0.01 == $order->get_total()) {
-                $shipping_total -= 0.01;
-            }
+            $shipping_total +=  $this->checkSum($order->get_total(), $sub_total, $shipping_total);
 
             $line_item = array(
                 'IPG_SHIPPING', // id
@@ -220,16 +268,32 @@ class Emspay_Gateway_Klarna extends Emspay_Gateway
         return $args;
     }
 
+    /**
+     * Add line item.
+     * @param $args
+     * @param $idx
+     * @param $line_item
+     */
     static public function add_line_item(&$args, $idx, $line_item)
     {
         $args['item' . $idx] = implode(';', $line_item);
     }
 
+    /**
+     * Round price.
+     * @param $price
+     * @return float
+     */
     static public function round_price($price)
     {
         return round($price, wc_get_price_decimals());
     }
 
+    /**
+     * Get phone.
+     * @param $order
+     * @return array
+     */
     public function get_klarna_phone($order)
     {
         return array(
@@ -239,7 +303,10 @@ class Emspay_Gateway_Klarna extends Emspay_Gateway
         );
     }
 
-
+    /**
+     * @param $order
+     * @return array
+     */
     public function get_klarna_address($order)
     {
         $address = $order->billing_address_1;
@@ -273,12 +340,22 @@ class Emspay_Gateway_Klarna extends Emspay_Gateway
         );
     }
 
-
+    /**
+     * Get hosted payment args for form rendering.
+     * @param $args
+     * @param $order
+     * @return array
+     */
     public function hosted_payment_args($args, $order)
     {
+        $totalCharge = $this->get_total($order);
+
+        $totalSub = self::round_price($args['subtotal'] + $order->get_total_shipping());
+        $totalSub += $this->checkSum(totalCharge, $args['subtotal'], $order->get_total_shipping());
+
         // we add the shipping price as line item
         $args['shipping'] = 0;
-        $args['subtotal'] = self::round_price($args['subtotal'] + $order->get_total_shipping());
+        $args['subtotal'] = $totalSub;
 
         // remove phone number, because it override klarnaPhone field
         unset($args['phone']);
