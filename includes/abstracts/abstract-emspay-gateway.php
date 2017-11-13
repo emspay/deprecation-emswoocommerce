@@ -412,7 +412,7 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway
             return self::round_price($order->get_subtotal() - $order->get_total_discount());
         }
 
-        return $order->get_subtotal();
+        return self::round_price($order->get_subtotal());
     }
 
     /**
