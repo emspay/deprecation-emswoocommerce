@@ -102,6 +102,9 @@ Automatic updates should work flawlessly; as always though, ensure you backup yo
 
 == Changelog ==
 
+= 1.1.3 =
+* Added ability to change the text for the first option in issuer select.
+
 = 1.1.2 =
 * Fixed: rounding issue after upgrade to latest woocommerce version 3.2.3
 
