@@ -63,7 +63,7 @@ class Emspay_Gateway_Ideal extends Emspay_Gateway {
 				'default' => 'no'
 			),
 			'select_text'   => array(
-				'title'   => __( 'Select first option text', 'emspay' ),
+				'title'   => __( 'Text for first option in issuer select', 'emspay' ),
 				'type'    => 'text',
 				'default' => 'Choose your bank'
 			),
