@@ -23,6 +23,8 @@ class Emspay_Gateway_Ideal extends Emspay_Gateway {
 
 	public $select_text = '';
 
+	public $skip_page = false;
+
   protected $supported_currencies = array(
 		'EUR', // Euro (978)
 	);
@@ -41,6 +43,7 @@ class Emspay_Gateway_Ideal extends Emspay_Gateway {
 
 		$this->select_bank = 'yes' === $this->get_option( 'select_bank', 'no' );
 		$this->select_text = $this->get_option( 'select_text', 'Choose your bank' );
+		$this->skip_page   = 'yes' === $this->get_option( 'skip_order_pay_page', 'no' );
 	}
 
 
@@ -66,6 +69,12 @@ class Emspay_Gateway_Ideal extends Emspay_Gateway {
 				'title'   => __( 'Text for first option in issuer select', 'emspay' ),
 				'type'    => 'text',
 				'default' => 'Choose your bank'
+			),
+			'skip_order_pay_page' => array(
+				'title'   => __( 'Skip order pay page', 'emspay' ),
+				'type'    => 'checkbox',
+				'label'   => __( 'Let your customers ability to skip order-pay page', 'emspay' ),
+				'default' => 'no',
 			),
 		);
 	}
@@ -169,15 +178,20 @@ class Emspay_Gateway_Ideal extends Emspay_Gateway {
 	 * @param WC_Order $order
 	 * @return array
 	 */
-	protected function process_hosted_payment($order)
-	{
-		$query_args = build_query( array( 'order_id' => $order->get_id() ) );
-
-		return array(
-			'order_id' => $order->get_id(),
-			'result' => 'success',
-			'redirect' => wc_get_checkout_url() . '?' . $query_args
-		);
+	protected function process_hosted_payment( $order ) {
+		if ( $this->skip_page ) {
+			$query_args = build_query( array( 'order_id' => $order->get_id() ) );
+			return array(
+				'order_id' => $order->get_id(),
+				'result'   => 'success',
+				'redirect' => wc_get_checkout_url() . '?' . $query_args,
+			);
+		} else {
+			return array(
+				'result' => 'success',
+				'redirect' => $order->get_checkout_payment_url(true)
+			);
+		}
 	}
 
 
