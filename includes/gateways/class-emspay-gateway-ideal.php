@@ -21,6 +21,8 @@ class Emspay_Gateway_Ideal extends Emspay_Gateway {
 
 	public $select_bank = false;
 
+	public $select_text = '';
+
   protected $supported_currencies = array(
 		'EUR', // Euro (978)
 	);
@@ -38,6 +40,7 @@ class Emspay_Gateway_Ideal extends Emspay_Gateway {
 		parent::load_options();
 
 		$this->select_bank = 'yes' === $this->get_option( 'select_bank', 'no' );
+		$this->select_text = $this->get_option( 'select_text', 'Choose your bank' );
 	}
 
 
@@ -58,6 +61,11 @@ class Emspay_Gateway_Ideal extends Emspay_Gateway {
 				'type'    => 'checkbox',
 				'label'   => __( 'Let your customers select the issuer bank', 'emspay' ),
 				'default' => 'no'
+			),
+			'select_text'   => array(
+				'title'   => __( 'Text for first option in issuer select', 'emspay' ),
+				'type'    => 'text',
+				'default' => 'Choose your bank'
 			),
 		);
 	}
@@ -94,13 +102,18 @@ class Emspay_Gateway_Ideal extends Emspay_Gateway {
 			return;
 		}
 
+		if ( !$this->select_text ) {
+			parent::payment_fields();
+			return;
+		}
+
 		if ( $description = $this->get_description() ) {
 			echo wpautop( wptexturize( $description ) );
 		}
 
 		?>
 		<select name="issuer_bank" id="issuer_bank">
-			<option value=""><?php _e('Choose your bank', 'emspay') ?></option>
+			<option value=""><?php _e( $this->select_text, 'emspay' ) ?></option>
 			<?php foreach ( $this->get_issuer_banks() as $option_key => $option_value ): ?>
 				<option<?php selected( $this->issuer_bank, $option_key ); ?> value="<?php echo esc_attr( $option_key ); ?>"><?php echo esc_html( $option_value ); ?></option>
 			<?php endforeach; ?>
@@ -148,6 +161,5 @@ class Emspay_Gateway_Ideal extends Emspay_Gateway {
 	protected function is_currency_supported( $currency ) {
 		return in_array( $currency, $this->supported_currencies );
 	}
-
 
 }
