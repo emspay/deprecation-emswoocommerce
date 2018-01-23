@@ -57,6 +57,12 @@ class Emspay_Gateway_Creditcard extends Emspay_Gateway {
 				'default'     => 'no',
 				'desc_tip'    => true,
 			),
+			'skip_order_pay_page' => array(
+				'title'   => __( 'Skip order pay page', 'emspay' ),
+				'type'    => 'checkbox',
+				'label'   => __( 'The payment confirmation page will be skipped, customers will be automatically redirected to the EMS payment gateway', 'emspay' ),
+				'default' => 'no',
+			),
 		);
 	}
 
