@@ -23,8 +23,6 @@ class Emspay_Gateway_Ideal extends Emspay_Gateway {
 
 	public $select_text = '';
 
-	public $skip_page = false;
-
   protected $supported_currencies = array(
 		'EUR', // Euro (978)
 	);
@@ -43,7 +41,6 @@ class Emspay_Gateway_Ideal extends Emspay_Gateway {
 
 		$this->select_bank = 'yes' === $this->get_option( 'select_bank', 'no' );
 		$this->select_text = $this->get_option( 'select_text', 'Choose your bank' );
-		$this->skip_page   = 'yes' === $this->get_option( 'skip_order_pay_page', 'no' );
 	}
 
 
@@ -171,74 +168,5 @@ class Emspay_Gateway_Ideal extends Emspay_Gateway {
 		return in_array( $currency, $this->supported_currencies );
 	}
 
-
-	/**
-	 * Process standard payments.
-	 *
-	 * @param WC_Order $order
-	 * @return array
-	 */
-	protected function process_hosted_payment( $order ) {
-		if ( $this->skip_page ) {
-			$query_args = build_query( array( 'order_id' => $order->get_id() ) );
-			return array(
-				'order_id' => $order->get_id(),
-				'result'   => 'success',
-				'redirect' => wc_get_checkout_url() . '?' . $query_args,
-			);
-		} else {
-			return array(
-				'result' => 'success',
-				'redirect' => $order->get_checkout_payment_url(true)
-			);
-		}
-	}
-
-
-	/**
-	 * Init hook.
-	 */
-	protected function init_hook()
-	{
-		parent::init_hook();
-		add_filter( 'woocommerce_after_checkout_form', array( $this, 'redirect_to_ems' ));
-	}
-
-
-	/**
-	 * Redirect to EMS.
-	 */
-	public function redirect_to_ems() {
-
-		if ( ! empty( $_GET['order_id'] ) ) {
-			$order = wc_get_order( $_GET['order_id'] );
-
-			$args = $this->get_hosted_payment_args( $order );
-			foreach ( $args as $field => $value ) {
-				$this->core_order->{$field} = $value;
-			}
-
-			// Initialize payment
-			$hosted_payment = new EmsCore\Request( $this->core_order, $this->core_options );
-			$form_fields    = $hosted_payment->getFormFields();
-
-			self::log( 'Payment form fields for Order #' . $_GET['order_id'] . ' ' . print_r( $form_fields, TRUE ) );
-			?>
-			<form id="payForm" method="post"
-				action="<?php echo $hosted_payment->getFormAction(); ?>">
-				<?php foreach ( $form_fields as $name => $value ) { ?>
-					<input type="hidden" name="<?php echo $name; ?>"
-						value="<?php echo esc_attr( $value ); ?>">
-				<?php } ?>
-			</form>
-			<script>
-              jQuery(document).ready(function () {
-                jQuery('#payForm').submit();
-              });
-			</script>
-			<?php
-		}
-
-	}
 
 }

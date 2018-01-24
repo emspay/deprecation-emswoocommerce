@@ -71,6 +71,8 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway
 
     protected $disabled_error;
 
+	public $skip_page = false;
+
     /**
      * Init and hook in the integration.
      *
@@ -109,10 +111,11 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway
     public function load_options()
     {
         // Define user set variables.
-        $this->enabled = $this->get_option('enabled', 'yes');
-        $this->title = $this->get_option('title');
-        $this->description = $this->get_option('description');
-        $this->debug = 'yes' === $this->get_option('debug', 'no');
+	    $this->enabled     = $this->get_option( 'enabled', 'yes' );
+	    $this->title       = $this->get_option( 'title' );
+	    $this->description = $this->get_option( 'description' );
+	    $this->debug       = 'yes' === $this->get_option( 'debug', 'no' );
+	    $this->skip_page   = 'yes' === $this->get_option( 'skip_order_pay_page','no' );
 
         self::$log_enabled = $this->debug;
 
@@ -202,6 +205,7 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway
         add_action('woocommerce_api_emspay_gateway', array('Emspay_Gateway_Response', 'response_handler'));
         add_filter('woocommerce_emspay_' . $this->id . '_hosted_args', array($this, 'hosted_payment_args'), 10, 2);
         add_filter('woocommerce_thankyou_order_received_text', array($this, 'thankyou_order_received_text'), 10, 2);
+	    add_filter( 'woocommerce_after_checkout_form', array( $this, 'redirect_to_ems' ));
     }
 
     /**
@@ -287,7 +291,14 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway
      */
     public function get_extra_form_fields()
     {
-        return array();
+        return array(
+	        'skip_order_pay_page' => array(
+		        'title'   => __( 'Skip order pay page', 'emspay' ),
+		        'type'    => 'checkbox',
+		        'label'   => __( 'The payment confirmation page will be skipped, customers will be automatically redirected to the EMS payment gateway', 'emspay' ),
+		        'default' => 'no',
+	        ),
+		);
     }
 
     /**
@@ -363,10 +374,19 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway
      */
     protected function process_hosted_payment($order)
     {
-        return array(
-            'result' => 'success',
-            'redirect' => $order->get_checkout_payment_url(true)
-        );
+	    if ( $this->skip_page ) {
+		    $query_args = build_query( array( 'order_id' => $order->get_id() ) );
+		    return array(
+			    'order_id' => $order->get_id(),
+			    'result'   => 'success',
+			    'redirect' => wc_get_checkout_url() . '?' . $query_args,
+		    );
+	    } else {
+		    return array(
+			    'result' => 'success',
+			    'redirect' => $order->get_checkout_payment_url(true)
+		    );
+	    }
     }
 
     /**
@@ -627,6 +647,42 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway
     {
         return round($price, wc_get_price_decimals());
     }
+
+	/**
+	 * Redirect to EMS.
+	 */
+	public function redirect_to_ems() {
+
+		if ( ! empty( $_GET['order_id'] ) ) {
+			$order = wc_get_order( $_GET['order_id'] );
+
+			$args = $this->get_hosted_payment_args( $order );
+			foreach ( $args as $field => $value ) {
+				$this->core_order->{$field} = $value;
+			}
+
+			// Initialize payment
+			$hosted_payment = new EmsCore\Request( $this->core_order, $this->core_options );
+			$form_fields    = $hosted_payment->getFormFields();
+
+			self::log( 'Payment form fields for Order #' . $_GET['order_id'] . ' ' . print_r( $form_fields, TRUE ) );
+			?>
+			<form id="payForm" method="post"
+				action="<?php echo $hosted_payment->getFormAction(); ?>">
+				<?php foreach ( $form_fields as $name => $value ) { ?>
+					<input type="hidden" name="<?php echo $name; ?>"
+						value="<?php echo esc_attr( $value ); ?>">
+				<?php } ?>
+			</form>
+			<script>
+              jQuery(document).ready(function () {
+                jQuery('#payForm').submit();
+              });
+			</script>
+			<?php
+		}
+
+	}
 
 }
 

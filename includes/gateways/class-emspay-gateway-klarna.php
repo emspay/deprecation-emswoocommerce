@@ -104,10 +104,19 @@ class Emspay_Gateway_Klarna extends Emspay_Gateway
             );
         }
 
-        return array(
-            'result' => 'success',
-            'redirect' => $order->get_checkout_payment_url(true)
-        );
+	    if ( $this->skip_page ) {
+		    $query_args = build_query( array( 'order_id' => $order->get_id() ) );
+		    return array(
+			    'order_id' => $order->get_id(),
+			    'result'   => 'success',
+			    'redirect' => wc_get_checkout_url() . '?' . $query_args,
+		    );
+	    } else {
+		    return array(
+			    'result' => 'success',
+			    'redirect' => $order->get_checkout_payment_url(true)
+		    );
+	    }
     }
 
     /**
