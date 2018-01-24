@@ -73,7 +73,7 @@ class Emspay_Gateway_Ideal extends Emspay_Gateway {
 			'skip_order_pay_page' => array(
 				'title'   => __( 'Skip order pay page', 'emspay' ),
 				'type'    => 'checkbox',
-				'label'   => __( 'Let your customers ability to skip order-pay page', 'emspay' ),
+				'label'   => __( 'The payment confirmation page will be skipped, customers will be automatically redirected to the EMS payment gateway', 'emspay' ),
 				'default' => 'no',
 			),
 		);
