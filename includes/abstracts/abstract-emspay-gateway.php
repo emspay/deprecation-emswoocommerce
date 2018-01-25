@@ -441,7 +441,22 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway
      */
     protected function get_vattax($order)
     {
-        return self::round_price($order->get_total_tax());
+    	$vat_number = get_post_meta( $order->get_id(), '_vat_number', TRUE );
+	    $ch = curl_init("https://euvat.ga/api/info/$vat_number" );
+	    curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+	    curl_setopt( $ch, CURLOPT_USERAGENT, 'emspay' );
+	    curl_setopt( $ch, CURLOPT_HTTPHEADER, array( 'Content-Type: application/json' ) );
+
+	    $data = json_decode( curl_exec( $ch ) );
+	    curl_close($ch);
+
+	    if ( $data->valid ) {
+	    	$vattax = 0;
+	    } else {
+		    $vattax = self::round_price($order->get_total_tax());
+		}
+
+        return $vattax;
     }
 
     /**
@@ -475,6 +490,7 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway
         $totalSub = $this->get_order_subtotal($order);
 
         $totalShipping = $this->get_total_shipping($order);
+
         $totalVat = $this->get_vattax($order);
 
         $checkSum = $totalCharge - $totalShipping - $totalVat - $totalSub;
