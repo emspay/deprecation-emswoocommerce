@@ -109,6 +109,10 @@ final class Emspay_Gateway_Plugin {
 	private function init_hooks() {
 		add_action( 'plugins_loaded', array( $this, 'init_plugin' ) );
 		add_filter( 'woocommerce_currencies', array( 'Emspay_Currency', 'emspay_supported_currencies' ) );
+		add_action( 'woocommerce_after_order_notes', array( $this,'ems_vat_field' ) );
+		add_action( 'woocommerce_checkout_update_order_meta', array( $this,'ems_checkout_vat_number_update_order_meta' ) );
+		add_action( 'woocommerce_admin_order_data_after_billing_address', array( $this,'ems_vat_number_display_admin_order_meta' ), 10, 1  );
+		add_filter( 'woocommerce_email_order_meta_keys', array( $this,'ems_vat_number_display_email' ) );
 	}
 
 
@@ -315,6 +319,50 @@ final class Emspay_Gateway_Plugin {
 	public function get_integration() {
 		// Find a different method of retrieving this value.
 		return WC()->integrations->integrations['emspay'];
+	}
+
+
+	/**
+	 * VAT Number in WooCommerce Checkout
+	 */
+	function ems_vat_field( $checkout ) {
+		echo '<div id="ems_vat_field"><h2>' . __('VAT Number') . '</h2>';
+
+		woocommerce_form_field( 'vat_number', array(
+			'type'          => 'text',
+			'class'         => array( 'vat-number-field form-row-wide') ,
+			'label'         => __( 'VAT Number' ),
+			'placeholder'   => __( 'Enter your VAT number' ),
+		), $checkout->get_value( 'vat_number' ));
+
+		echo '</div>';
+	}
+
+
+	/**
+	 * Save VAT Number in the order meta
+	 */
+	function ems_checkout_vat_number_update_order_meta( $order_id ) {
+		if ( ! empty( $_POST['vat_number'] ) ) {
+			update_post_meta( $order_id, '_vat_number', sanitize_text_field( $_POST['vat_number'] ) );
+		}
+	}
+
+
+	/**
+	 * Display VAT Number in order edit screen
+	 */
+	function ems_vat_number_display_admin_order_meta( $order ) {
+		echo '<p><strong>' . __( 'VAT Number', 'woocommerce' ) . ' : </strong> ' . get_post_meta( $order->get_id(), '_vat_number', true ) . '</p>';
+	}
+
+
+	/**
+	 * VAT Number in emails
+	 */
+	function ems_vat_number_display_email( $keys ) {
+		$keys['VAT Number'] = '_vat_number';
+		return $keys;
 	}
 
 }
