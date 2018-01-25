@@ -268,6 +268,12 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway
                     'default' => 'no',
                     'description' => sprintf(__('Log EMS events, such as pay request, response, inside: <br><code>%s</code>', 'emspay'), wc_get_log_file_path('emspay'))
                 ),
+                'skip_order_pay_page' => array(
+	                'title'   => __( 'Skip order pay page', 'emspay' ),
+	                'type'    => 'checkbox',
+	                'label'   => __( 'The payment confirmation page will be skipped, customers will be automatically redirected to the EMS payment gateway', 'emspay' ),
+	                'default' => 'no',
+                ),
             ), $this->get_extra_form_fields());
     }
 
@@ -291,14 +297,7 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway
      */
     public function get_extra_form_fields()
     {
-        return array(
-	        'skip_order_pay_page' => array(
-		        'title'   => __( 'Skip order pay page', 'emspay' ),
-		        'type'    => 'checkbox',
-		        'label'   => __( 'The payment confirmation page will be skipped, customers will be automatically redirected to the EMS payment gateway', 'emspay' ),
-		        'default' => 'no',
-	        ),
-		);
+        return array();
     }
 
     /**
@@ -343,7 +342,7 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway
     {
         // Store meta data to order.
         foreach ($this->get_emspay_meta($order) as $key => $value) {
-            update_post_meta($order->id, $key, $value);
+            update_post_meta($order->get_id(), $key, $value);
         }
     }
 
@@ -505,7 +504,7 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway
             $this->processTotals($order),
             array(
                 'mobile' => wp_is_mobile(),
-                'orderId' => $order->id,
+                'orderId' => $order->get_id(),
                 'language' => $this->get_emspay_language(),
                 'paymentMethod' => $order->ems_payment_method,
                 'currency' => $order->ems_currency_code,
