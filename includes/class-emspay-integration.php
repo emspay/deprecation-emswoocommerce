@@ -51,6 +51,12 @@ class Emspay_Integration extends WC_Integration {
 	public $show_icon;
 
 	/**
+	 * Show VAT number field.
+	 * @var boolean
+	 */
+	public $show_vat_number_field;
+
+	/**
 	 * Init and hook in the integration.
 	 *
 	 * @since  1.0.0
@@ -66,9 +72,10 @@ class Emspay_Integration extends WC_Integration {
 		$this->init_settings();
 
 		// Define user set variables.
-		$this->checkoutoption = $this->get_option( 'checkoutoption', 'classic' );
-		$this->mode           = $this->get_option( 'mode', 'payonly' );
-		$this->show_icon      = 'yes' === $this->get_option( 'show_icon', 'yes' );
+		$this->checkoutoption        = $this->get_option( 'checkoutoption', 'classic' );
+		$this->mode                  = $this->get_option( 'mode', 'payonly' );
+		$this->show_icon             = 'yes' === $this->get_option( 'show_icon', 'yes' );
+		$this->show_vat_number_field = 'yes' === $this->get_option( 'show_vat_number_field', 'yes' );
 
 		$this->init_environment();
 
@@ -179,6 +186,12 @@ class Emspay_Integration extends WC_Integration {
 				'type'    => 'checkbox',
 				'label'   => __( 'Show icons', 'emspay' ),
 				'default' => 'yes'
+			),
+			'show_vat_number_field' => array(
+				'title'   => __( 'Show VAT number field', 'emspay' ),
+				'type'    => 'checkbox',
+				'label'   => __( 'Show field', 'emspay' ),
+				'default' => 'no'
 			),
 		);
 	}

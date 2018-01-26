@@ -326,6 +326,8 @@ final class Emspay_Gateway_Plugin {
 	 * VAT Number in WooCommerce Checkout
 	 */
 	function ems_vat_field( $checkout ) {
+		$integration = $this->get_integration();
+		if ( $integration->show_vat_number_field ) {
 		echo '<div id="ems_vat_field"><h2>' . __('VAT Number') . '</h2>';
 
 		woocommerce_form_field( 'vat_number', array(
@@ -336,6 +338,7 @@ final class Emspay_Gateway_Plugin {
 		), $checkout->get_value( 'vat_number' ));
 
 		echo '</div>';
+		}
 	}
 
 

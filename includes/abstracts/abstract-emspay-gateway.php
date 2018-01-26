@@ -442,13 +442,16 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway
     protected function get_vattax($order)
     {
     	$vat_number = get_post_meta( $order->get_id(), '_vat_number', TRUE );
-	    $ch = curl_init("https://euvat.ga/api/info/$vat_number" );
-	    curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
-	    curl_setopt( $ch, CURLOPT_USERAGENT, 'emspay' );
-	    curl_setopt( $ch, CURLOPT_HTTPHEADER, array( 'Content-Type: application/json' ) );
+    	$data = array();
+	    if ( $vat_number ) {
+		    $ch = curl_init("https://euvat.ga/api/info/$vat_number" );
+		    curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+		    curl_setopt( $ch, CURLOPT_USERAGENT, 'emspay' );
+		    curl_setopt( $ch, CURLOPT_HTTPHEADER, array( 'Content-Type: application/json' ) );
 
-	    $data = json_decode( curl_exec( $ch ) );
-	    curl_close($ch);
+		    $data = json_decode( curl_exec( $ch ) );
+		    curl_close($ch);
+	    }
 
 	    if ( $data->valid ) {
 	    	$vattax = 0;
