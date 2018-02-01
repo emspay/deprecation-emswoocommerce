@@ -106,6 +106,9 @@ Automatic updates should work flawlessly; as always though, ensure you backup yo
 * Added ability to change the text for the first option in issuer select.
 * Added ability to skip order-pay page.
 
+= 1.1.3 = 
+
+
 = 1.1.2 =
 * Fixed: rounding issue after upgrade to latest woocommerce version 3.2.3
 
