@@ -9,6 +9,7 @@ class Response {
   private static $requiredFields = array(
     'approval_code',
     'oid',
+    'customerid',
     'status',
     'hash_algorithm',
     'paymentMethod',
@@ -131,5 +132,13 @@ class Response {
         $this->get('approval_code')
       )
     );
+  }
+
+  function getCustomerId() {
+    if ( $this->get( 'customerid' ) !== NULL ) {
+      return $this->get( 'customerid' );
+    }
+
+    return NULL;
   }
 }
