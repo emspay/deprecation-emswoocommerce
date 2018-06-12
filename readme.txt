@@ -102,6 +102,9 @@ Automatic updates should work flawlessly; as always though, ensure you backup yo
 
 == Changelog ==
 
+= 1.1.5 =
+* Added "customerid" field to payment form.
+
 = 1.1.4 =
 * Added ability to change the text for the first option in issuer select.
 * Added ability to skip order-pay page.
