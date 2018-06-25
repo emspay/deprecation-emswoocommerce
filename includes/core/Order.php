@@ -3,8 +3,10 @@ namespace EmsCore;
 
 class Order {
   const TXNTYPE_SALE = 'sale';
+  const TXNTYPE_PREAUTH = 'preauth';
   const TXNTYPES = array(
-    Order::TXNTYPE_SALE
+    Order::TXNTYPE_SALE,
+    Order::TXNTYPE_PREAUTH
   );
 
   const HASH_ALGORTYTHM_SHA256 = 'SHA256';
@@ -72,6 +74,7 @@ class Order {
     'currency' => 'currency',
     'mobile' => 'bool',
     'orderId' => 'notempty',
+    'customerid' => 'notempty',
     'paymentMethod' => Order::PAYMENTS,
     'idealIssuerID' => Order::IDEAL_BANKS,
     'authenticateTransaction' => 'bool',

@@ -500,7 +500,11 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway
      */
     protected function get_hosted_payment_args($order)
     {
-
+	    if ($this->txntype_preauth) {
+		    $transactionType = 'preauth';
+	    } else {
+		    $transactionType = 'sale';
+	    }
         $args = apply_filters('woocommerce_emspay_' . $this->id . '_hosted_args', array_merge(
             $this->processTotals($order),
             array(
@@ -511,6 +515,7 @@ abstract class Emspay_Gateway extends WC_Payment_Gateway
                 'currency' => $order->ems_currency_code,
                 'timezone' => wc_timezone_string(),
                 'transactionTime' => $order->ems_txndatetime,
+                'transactionType' => $transactionType,
             ),
             $this->get_billing_args($order),
             $this->get_shipping_args($order)
