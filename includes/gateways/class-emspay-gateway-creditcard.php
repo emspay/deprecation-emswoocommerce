@@ -17,8 +17,6 @@ class Emspay_Gateway_Creditcard extends Emspay_Gateway {
 
 	protected $authenticate_transaction = false;
 
-	protected $txntype_sale = false;
-
 	protected $txntype_preauth = false;
 
 	protected function define_variables() {
@@ -33,7 +31,6 @@ class Emspay_Gateway_Creditcard extends Emspay_Gateway {
 		parent::load_options();
 
 		$this->authenticate_transaction = 'yes' === $this->get_option( '3d_secure', 'no' );
-		$this->txntype_sale             = 'yes' === $this->get_option( 'txntype_sale', 'no' );
 		$this->txntype_preauth          = 'yes' === $this->get_option( 'txntype_preauth', 'no' );
 	}
 
@@ -69,16 +66,10 @@ class Emspay_Gateway_Creditcard extends Emspay_Gateway {
 				'label'   => __( 'The payment confirmation page will be skipped, customers will be automatically redirected to the EMS payment gateway', 'emspay' ),
 				'default' => 'no',
 			),
-			'txntype_sale' => array(
-				'title'   => __( 'txntype Sale', 'emspay' ),
-				'type'    => 'checkbox',
-				'label'   => __( 'Enable "sale" txntype.', 'emspay' ),
-				'default' => 'yes',
-			),
 			'txntype_preauth' => array(
 				'title'   => __( 'txntype Preauth', 'emspay' ),
 				'type'    => 'checkbox',
-				'label'   => __( 'Enable "preauth" txntype.', 'emspay' ),
+				'label'   => __( 'Enable "preauth" txntype. (Default txntype is "Sale")', 'emspay' ),
 				'default' => 'no',
 			),
 		);
