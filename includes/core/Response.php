@@ -108,7 +108,7 @@ class Response {
 
   private function getResponseHash() {
     return hash(
-      $this->order->hashAlgorythm,
+      $this->order->hashAlgorithm,
       bin2hex(
         $this->options->getSharedSecret() .
         $this->get('approval_code') .
@@ -122,7 +122,7 @@ class Response {
 
   private function getNotificationHash() {
     return hash(
-      $this->order->hashAlgorythm,
+      $this->order->hashAlgorithm,
       bin2hex(
         $this->get('chargetotal') .
         $this->options->getSharedSecret() .

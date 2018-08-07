@@ -14,7 +14,7 @@ class Request {
 		'txntype' => array('order', 'transactionType'),
 		'timezone' => array('order', 'timezone'),
 		'txndatetime' => array('order', 'transactionTime'),
-		'hash_algorithm' => array('order', 'hashAlgorythm'),
+		'hash_algorithm' => array('order', 'hashAlgorithm'),
 		'hash' => array('getHash'),
 		'storename' => array('options', 'storename'),
 		'mode' => array('options', 'paymode'),
@@ -163,7 +163,7 @@ class Request {
 
 	private function getHash() {
 		return hash(
-			$this->order->hashAlgorythm,
+			$this->order->hashAlgorithm,
 			bin2hex(
 				$this->options->getStoreName() .
 				$this->order->transactionTime .
