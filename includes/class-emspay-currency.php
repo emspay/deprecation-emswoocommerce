@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 final class Emspay_Currency {
 
 	// List of supported currencies (numeric ISO code map)
-	const NUMERIC_CURRENCY_CODES = array(
+  public static $numeric_currency_codes = array(
 		'AUD' => '036', // Australian dollar
 		'BRL' => '986', // Brazilian real
 		'EUR' => '978', // Euro
@@ -71,7 +71,7 @@ final class Emspay_Currency {
 	 * @return bool
 	 */
 	public static function is_valid_currency( $currency_code ) {
-		return array_key_exists( $currency_code, self::NUMERIC_CURRENCY_CODES );
+		return array_key_exists( $currency_code, self::$numeric_currency_codes );
 	}
 
 
@@ -84,7 +84,7 @@ final class Emspay_Currency {
 	 */
 	public static function get_numeric_currency_code( $currency_code ) {
 		if ( self::is_valid_currency( $currency_code ) ) {
-			return self::NUMERIC_CURRENCY_CODES[ $currency_code ];
+			return self::$numeric_currency_codes[ $currency_code ];
 		}
 
 		return '';
@@ -99,7 +99,7 @@ final class Emspay_Currency {
 	 * @return array
 	 */
 	public static function emspay_supported_currencies( $currencies ) {
-		return array_intersect_key( $currencies, self::NUMERIC_CURRENCY_CODES );
+		return array_intersect_key( $currencies, self::$numeric_currency_codes );
 	}
 
 
