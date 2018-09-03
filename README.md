@@ -24,10 +24,10 @@ Get a merchant account by sending an email with your request to integrations@ems
 
 ### Contact EMS Support
 Visit the FAQ:
-http://www.emspay.eu/en/customer-service/faq
+https://developer.emspay.eu/faq
 
 Contact information:
-https://www.emspay.eu/en/about-ems/contact
+https://developer.emspay.eu/contact
 
 ## Features
 * Support for all available EMS payment methods
