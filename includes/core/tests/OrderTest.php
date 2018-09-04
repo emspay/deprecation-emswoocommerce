@@ -7,7 +7,7 @@ class OrderTest extends TestCase {
     $order = new \EmsCore\Order();
     $this->assertEquals('', $order->orderId);
     $this->assertEquals(\EmsCore\Order::TXNTYPE_SALE, $order->transactionType);
-    $this->assertEquals(\EmsCore\Order::HASH_ALGORTYTHM_SHA256, $order->hashAlgorythm);
+    $this->assertEquals(\EmsCore\Order::HASH_ALGORITHM_SHA256, $order->hashAlgorithm);
     $this->assertEquals(array(), $order->items);
   }
 

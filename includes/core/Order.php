@@ -9,9 +9,9 @@ class Order {
     Order::TXNTYPE_PREAUTH
   );
 
-  const HASH_ALGORTYTHM_SHA256 = 'SHA256';
-  const HASH_ALGORYTHMS = array(
-    Order::HASH_ALGORTYTHM_SHA256
+  const HASH_ALGORITHM_SHA256 = 'SHA256';
+  const HASH_ALGORITHMS = array(
+    Order::HASH_ALGORITHM_SHA256
   );
 
   const PAYMENT_MASTERCARD = 'M';
@@ -66,7 +66,7 @@ class Order {
     'transactionType' => Order::TXNTYPES,
     'timezone' => array(),
     'transactionTime' => 'time',
-    'hashAlgorythm' => Order::HASH_ALGORYTHMS,
+    'hashAlgorithm' => Order::HASH_ALGORITHMS,
     'chargetotal' => 'price',
     'shipping' => 'price',
     'vattax' => 'price',
@@ -111,7 +111,7 @@ class Order {
 
   private $fields = array(
     'transactionType' => Order::TXNTYPE_SALE,
-    'hashAlgorythm' => Order::HASH_ALGORTYTHM_SHA256,
+    'hashAlgorithm' => Order::HASH_ALGORITHM_SHA256,
     'items' => array()
   );
 
