@@ -102,6 +102,11 @@ Automatic updates should work flawlessly; as always though, ensure you backup yo
 
 == Changelog ==
 
+= 1.1.7 =
+* Tested: WooCommerce version: 3.5.7, compatible
+* Tested: WordPress version: 5.1.1, compatible
+* Tested: PHP 7.0.13, compatible
+
 = 1.1.6 =
 * Fixed: Arrays are not allowed in class constants, php version compatibility.
 
