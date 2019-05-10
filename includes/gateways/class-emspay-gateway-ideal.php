@@ -141,6 +141,8 @@ class Emspay_Gateway_Ideal extends Emspay_Gateway {
 			'SNSBNL2A' => __( 'SNS Bank', 'emspay' ),
 			'TRIONL2U' => __( 'Triodos Bank', 'emspay' ),
 			'FVLBNL22' => __( 'van Lanschot', 'emspay' ),
+			'HANDNL2A' => __( 'Handelsbanken', 'emspay' ),
+			'MOYONL21' => __( 'Moneyou', 'emspay' ),
 		);
 	}
 
@@ -167,6 +169,5 @@ class Emspay_Gateway_Ideal extends Emspay_Gateway {
 	protected function is_currency_supported( $currency ) {
 		return in_array( $currency, $this->supported_currencies );
 	}
-
 
 }
