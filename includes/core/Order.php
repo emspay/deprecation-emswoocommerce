@@ -49,6 +49,8 @@ class Order {
   const IDEAL_REGIOBANK = 'RBRBNL21';
   const IDEAL_ASN_BANK = 'ASNBNL21';
   const IDEAL_BUNQ = 'BUNQNL2A';
+  const IDEAL_HANDNL = 'HANDNL2A';
+  const IDEAL_MOYONL = 'MOYONL21';
   const IDEAL_BANKS = array(
     Order::IDEAL_ABN_AMRO,
     Order::IDEAL_ING,
@@ -59,7 +61,9 @@ class Order {
     Order::IDEAL_RABOBANK,
     Order::IDEAL_REGIOBANK,
     Order::IDEAL_ASN_BANK,
-    Order::IDEAL_BUNQ
+    Order::IDEAL_BUNQ,
+    Order::IDEAL_HANDNL,
+    Order::IDEAL_MOYONL,
   );
 
   private static $fieldValidation = array(
