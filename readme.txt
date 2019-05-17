@@ -104,6 +104,12 @@ Automatic updates should work flawlessly; as always though, ensure you backup yo
 
 == Changelog ==
 
+= 1.1.8 =
+* Added: 2 new EMS banks Handelsbanken and Moneyou.
+* Added: creditcard brand selection;
+* Added: txntype for credit cards can be sale or preauth
+* Tested: WordPress version: 5.2, compatible
+
 = 1.1.7 =
 * Tested: WooCommerce version: 3.5.7, compatible
 * Tested: WordPress version: 5.1.1, compatible
